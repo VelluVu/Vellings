@@ -35,7 +35,7 @@ public class GameControl : MonoBehaviour
     public Transform spawnTransform;
     public Vector3 spawnPosition;
 
-    public UnitControl unit;
+    public Unit unit;
 
 
     //Builds the level when the game starts.

@@ -4,159 +4,67 @@ using UnityEngine;
 
 public class UnitControl : MonoBehaviour {
 
-    bool isInit;
-    public bool move;
-    public bool onGround;
-    bool previouslyGrounded;
-    bool movingLeft;
-    bool initLerp;
+    public bool changeSpeed;
 
+    float delta;
+    float timer;
+    public float maxUnits = 10;
+    public float timeScale = 1;
+    public float Interval = 1;
+    public GameObject unitPrefab;
 
-    float MoveSpeed;
-    public float lerpSpeed = 1;
-    float t;
-    int t_x;
-    int t_y;
-    int airFrames;
+    GameObject unitsP;
+    List<Unit> units = new List<Unit>();
 
-    Node curNode;
-    Node targetNode;
-    Vector3 targetPos;
-    Vector3 startPos;
-
-    GameControl gameControl;
-    public SpriteRenderer renderer;
-
-    
-    
-    
-
-	public void Init(GameControl gc)
-    {
-        gameControl = gc;
-        PlaceOnNode();
-        isInit = true;
+	
+	void Start () {
+        unitsP = new GameObject();
+        unitsP.name = "units parent";
 	}
-
-    void PlaceOnNode()
-    {
-        curNode = gameControl.spawnNode;
-        transform.position = gameControl.spawnPosition;
-    }
 	
 	void Update () {
-		
-        if (!isInit)
-        {
-            return;
-        }
-        if (curNode == null)
-        {
-            return;
-        }
-        if (!move)
-        {
-            return;
-        }
-        if (!initLerp)
-        {
-            initLerp = true;
-            startPos = transform.position;
-            t = 0;
-            Pathfind();
-            Vector3 tp = gameControl.GetWorldPosFromNode(targetNode);
-            targetPos = tp;
-            float d = Vector3.Distance(targetPos, startPos);
-            MoveSpeed = lerpSpeed / d;
 
-        } else
+        delta = Time.deltaTime;
+        delta *= timeScale;
+
+        if(changeSpeed)
         {
-            t += Time.deltaTime * MoveSpeed;
-            if(t > 1)
+            changeSpeed = false;
+            ChangeSpeedOfUnits(timeScale);
+        }
+
+        if (units.Count < maxUnits)
+        {
+
+
+            timer -= delta;
+            if (timer < 0)
             {
-                t = 1;
-                initLerp = false;
-                curNode = targetNode;
+                timer = Interval;
+                SpawnLenny();
             }
-
-            Vector3 tp = Vector3.Lerp(startPos, targetPos, t);
-            transform.position = tp;
         }
 
-        renderer.flipX = movingLeft;
-
+		for (int i = 0; i < units.Count; i++)
+        {
+            units[i].FrameTick(delta);
+        }
 	}
-    void Pathfind()
+    void SpawnLenny()
     {
-        t_x = curNode.x;
-        t_y = curNode.y;
-
-        bool downIsAir = IsAir(t_x, t_y - 1);
-        bool forwardIsAir = IsAir(t_x, t_y);
-
-        //Falling down.
-        if(downIsAir)
-        {
-            t_x = curNode.x;
-            t_y -= 1;
-
-            onGround = false;
-            if(!onGround && previouslyGrounded)
-            {
-
-            }
-
-        }
-        //On the ground.
-        else
-        {
-            onGround = true;
-            if(onGround && !previouslyGrounded)
-            {
-
-            }
-            if (forwardIsAir)
-            {
-                t_x = (movingLeft) ? t_x - 1 : t_x + 1;
-                t_y = curNode.y;
-            }
-            else
-            {
-                int s = 0;
-                bool isValid = false;
-                while ( s < 3)
-                {
-                    s++;
-                    bool f_isAir = IsAir(t_x, t_y + s);
-                    if (f_isAir)
-                    {
-                        isValid = true;
-                        break;
-                    }
-                }
-                if (isValid)
-                {
-                    t_y += s;
-                } else
-                {
-                    movingLeft = !movingLeft;
-                    t_x = (movingLeft) ? curNode.x - 1 : curNode.y + 1;
-                }
-            }
-        }
-
-        targetNode = gameControl.GetNode(t_x,t_y);
-        previouslyGrounded = onGround;
-
+        GameObject spawn = Instantiate(unitPrefab);
+        spawn.transform.parent = unitsP.transform;
+        Unit u = spawn.GetComponent<Unit>();
+        u.Init(FindObjectOfType<GameControl>());
+        units.Add(u);
+        u.move = true;
     }
-
-    bool IsAir(int x, int y)
+    void ChangeSpeedOfUnits(float t)
     {
-        Node n = gameControl.GetNode(x, y);
-        if (n == null)
+        for (int i = 0; i < units.Count; i++)
         {
-            return true;
+            units[i].unitAnimator.speed = t;
         }
-        return n.isEmpty;
+
     }
 }
