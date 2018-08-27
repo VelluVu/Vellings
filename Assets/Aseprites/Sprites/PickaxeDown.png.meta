@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: e12320f03a70c754d988e1d77f3ac63a
+guid: 393c9a6d1173046448826ff45796fc54
 TextureImporter:
   fileIDToRecycleName:
-    21300000: EndPoint 0
+    21300000: PickaxeDown 0
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -61,7 +61,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 128
+    maxTextureSize: 32
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -72,7 +72,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   - serializedVersion: 2
     buildTarget: Standalone
-    maxTextureSize: 128
+    maxTextureSize: 32
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -83,7 +83,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   - serializedVersion: 2
     buildTarget: Android
-    maxTextureSize: 128
+    maxTextureSize: 32
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -96,13 +96,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: EndPoint 0
+      name: PickaxeDown 0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 64
+        width: 32
+        height: 32
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -110,7 +110,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 200510fa5242e8843ae13682b9090637
+      spriteID: 34e53a8c7219da642b5385ee7a963809
       vertices: []
       indices: 
       edges: []
@@ -118,7 +118,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 02f434e952e1cf9429b4932b44eff86a
+    spriteID: 2ab868c8e218e934a956cd6766582013
     vertices: []
     indices: 
     edges: []

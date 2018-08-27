@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Controls the game area by creating a pixel perfect level and manipulating pixel colors.
@@ -25,7 +25,7 @@ public class GameControl : MonoBehaviour
     Node previousNode;
 
     //Declaring Vector3 for mouse position.
-    Vector3 mousePos;
+    private Vector3 mousePos;
 
     //Eraser
     public float editRadius = 6;
@@ -35,16 +35,29 @@ public class GameControl : MonoBehaviour
     public Transform spawnTransform;
     public Vector3 spawnPosition;
 
-    public Unit unit;
+    Unit curUnit;
 
+    public UnitControl unitControl;
+    public UiControl uiControl;
+
+    private bool overUIElement;
+
+    public static GameControl singleton;
+    
+
+    public void Awake()
+    {
+        singleton = this;
+    }
 
     //Builds the level when the game starts.
     private void Start()
     {
+        unitControl = UnitControl.singleton;
+        uiControl = UiControl.singleton;
         CreateLevel();
         spawnNode = GetNodeFromWorldPos(spawnTransform.position);
         spawnPosition = GetWorldPosFromNode(spawnNode);
-        unit.Init(this);
     }
 
     /// <summary>
@@ -96,8 +109,12 @@ public class GameControl : MonoBehaviour
     //Goes through these functions every "second".
     private void Update()
     {
+        overUIElement = EventSystem.current.IsPointerOverGameObject();
         GetMousePosition();
-        HandleMouseInput();
+        CheckForUnit();
+        uiControl.FrameTick();
+        HandleUnit();
+        //HandleMouseInput();
     }
 
     /// <summary>
@@ -106,7 +123,7 @@ public class GameControl : MonoBehaviour
     /// and if current node is not previous node
     /// it makes previous node to a current node.
     /// Intializes Color c to color white then makes it transparent == 0.
-    /// Loops x and y size -3 to less than 3 "size of eraser" and
+    /// Loops x and y size -6 to less than 6 "size of eraser" and
     /// makes current "pixel" node transparent unless it's null "already transparent".
     /// after loop aplies the change to the level texture.
     /// </summary>
@@ -157,6 +174,39 @@ public class GameControl : MonoBehaviour
 
             }
         }
+    }
+
+    void HandleUnit()
+    {
+        if (curUnit == null)
+        {
+            return;
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (uiControl.targetAbility == Ability.walker)
+            {
+                return;
+            }
+            if (curUnit.curAbility == Ability.walker)
+            {
+                curUnit.ChangeAbility(uiControl.targetAbility);
+            }
+        }
+    }
+
+    void CheckForUnit()
+    {
+        mousePos.z = 0;
+
+        curUnit = unitControl.GetClosest(mousePos);
+
+        if (curUnit == null)
+        {
+            uiControl.overUnit = false;
+            return;
+        }
+        uiControl.overUnit = true;
     }
 
     /// <summary>
@@ -238,5 +288,6 @@ public class Node
     public int x;
     public int y;
     public bool isEmpty;
+    public bool isStopped;
 }
 

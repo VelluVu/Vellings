@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: e12320f03a70c754d988e1d77f3ac63a
+guid: 035ff5a21ab52ee4fb94afcf21f909b6
 TextureImporter:
   fileIDToRecycleName:
-    21300000: EndPoint 0
+    21300000: Cursor_Selection 0
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -41,7 +41,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -61,29 +61,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 128
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Standalone
-    maxTextureSize: 128
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Android
-    maxTextureSize: 128
+    maxTextureSize: 16
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -96,13 +74,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: EndPoint 0
+      name: Cursor_Selection 0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 64
+        width: 16
+        height: 16
       alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -110,7 +88,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 200510fa5242e8843ae13682b9090637
+      spriteID: 9dec270e2bc0d26479f5103bafe27e8c
       vertices: []
       indices: 
       edges: []
@@ -118,7 +96,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 02f434e952e1cf9429b4932b44eff86a
+    spriteID: 7a4bab14380acf64d813e5c3f6d260c5
     vertices: []
     indices: 
     edges: []

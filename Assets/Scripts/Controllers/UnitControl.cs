@@ -16,8 +16,14 @@ public class UnitControl : MonoBehaviour {
     GameObject unitsP;
     List<Unit> units = new List<Unit>();
 
-	
-	void Start () {
+    public static UnitControl singleton;
+
+    private void Awake()
+    {
+        singleton = this;
+    }
+
+    void Start () {
         unitsP = new GameObject();
         unitsP.name = "units parent";
 	}
@@ -67,4 +73,24 @@ public class UnitControl : MonoBehaviour {
         }
 
     }
+    public Unit GetClosest(Vector3 origin)
+    {
+        float minDis = 0.1f;
+        Unit r = null;
+
+        for (int i = 0; i < units.Count; i++)
+        {
+            float tempDistance = Vector3.Distance(origin, units[i].transform.position);
+            if(tempDistance < minDis)
+            {
+                minDis = tempDistance;
+                r = units[i];
+            }
+        }
+        return r;
+    }   
+}
+public enum Ability
+{
+    walker, bouncer, umbrella, dig_forward, dig_down, explode, die
 }
