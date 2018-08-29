@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>
@@ -114,6 +115,7 @@ public class GameControl : MonoBehaviour
         CheckForUnit();
         uiControl.FrameTick();
         HandleUnit();
+        ClearPixelList();
         //HandleMouseInput();
     }
 
@@ -220,6 +222,34 @@ public class GameControl : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         mousePos = ray.GetPoint(5);
         currentNode = GetNodeFromWorldPos(mousePos);
+    }
+
+    List<Node> ClearNodes = new List<Node>();
+
+    public void AddNodePossibilities(List<Node> nlist)
+    {
+        ClearNodes.AddRange(nlist);
+    }
+
+    public void ClearPixelList()
+    {
+        if (ClearNodes.Count == 0)
+        {
+            return;
+        }
+
+        Color c = Color.white;
+        c.a = 0;
+
+        for (int i = 0; i < ClearNodes.Count; i++)
+        {
+            ClearNodes[i].isEmpty = true;
+            textureInstance.SetPixel(ClearNodes[i].x, ClearNodes[i].y, c);
+        }
+
+        ClearNodes.Clear();
+        textureInstance.Apply();
+
     }
 
     /// <summary>

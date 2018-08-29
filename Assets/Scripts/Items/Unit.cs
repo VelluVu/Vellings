@@ -12,17 +12,26 @@ public class Unit : MonoBehaviour {
     bool initLerp;
 
     public bool isUmbrella;
+    public bool isDigForward;
 
     public Ability curAbility;
 
     float moveSpeed;
     float lerpSpeed = 0.3f;
-    public float fallSpeed = 3f;
-    public float umbrellaSpeed = 0.3f;
+    float fallSpeed = 3f;
+    float umbrellaSpeed = 0.3f;
+    float dig_d_speed = 0.030f;
+
     float t;
     int t_x;
     int t_y;
+
     int airLimit;
+    public int digFrontLimit = 40;
+    int digFCount;
+    public int digBelowLimit = 30;
+    int digBCount;
+    public int deathFallLimit = 70;
 
     Node curNode;
     Node targetNode;
@@ -49,6 +58,7 @@ public class Unit : MonoBehaviour {
         transform.position = gameControl.spawnPosition;
     }
 	
+    //Replaces Update, this is updated on GameControl class.
 	public void FrameTick (float delta) {
 		
         if (!isInit)
@@ -69,13 +79,16 @@ public class Unit : MonoBehaviour {
         {
             case Ability.walker:
             case Ability.umbrella:
-            case Ability.dig_forward:
                 Walker(delta);
                 break;
             case Ability.bouncer:
                 Bouncer();
                 break;
+            case Ability.dig_forward:
+                DigForward(delta);
+                break;
             case Ability.dig_down:
+                DigBelow(delta);
                 break;
             case Ability.explode:
                 break;
@@ -125,15 +138,15 @@ public class Unit : MonoBehaviour {
         else
         {
             onGround = true;
-            airLimit = 0;
             //land on ground
             if(onGround && !previouslyGrounded)
             {
-                if (airLimit > 60 && !isUmbrella)
+                Debug.Log(airLimit);
+                if (airLimit > deathFallLimit && !isUmbrella)
                 {
                     targetNode = curNode;
                     ChangeAbility(Ability.die);
-                    unitAnimator.Play("Explode");
+                    unitAnimator.Play("Death_land");
                     previouslyGrounded = onGround;
                     return true;
                 }
@@ -169,24 +182,54 @@ public class Unit : MonoBehaviour {
                 {
                     int height = 0;
                     bool isValid = false;
-                    while (height < 3)
+                    bool startDig = false;
+
+                    while (height < 4)
                     {
-                        height++;
+                        
                         bool n_isAir = IsAir(t_x, t_y + height);
+
+                        if (isDigForward)
+                        {
+                            if (height > 0)
+                            {
+                                if (!n_isAir)
+                                {
+                                    startDig = true;
+                                    break;
+                                }
+                            }
+                        }
+
                         if (n_isAir)
+
                         {
                             isValid = true;
                             break;
                         }
+                        height++;
                     }
-                    if (isValid)
+
+                    if (isValid && !startDig)
                     {
                         t_y += height;
                     }
                     else
                     {
-                        movingLeft = !movingLeft;
-                        t_x = (movingLeft) ? curNode.x - 1 : curNode.y + 1;
+                    
+                        if (startDig)
+                        {
+                            curAbility = Ability.dig_forward;
+                            unitAnimator.Play("Digfront");
+                            return false;
+                        }
+                        else
+                        { 
+                        
+                            movingLeft = !movingLeft;
+                            t_x = (movingLeft) ? curNode.x - 1 : curNode.x + 1;
+                        
+                        }
                     }
                 }
             }
@@ -236,6 +279,12 @@ public class Unit : MonoBehaviour {
                 targetPos = tp;
 
             }
+            else
+            {
+
+                
+
+            }
 
             float distance = Vector3.Distance(targetPos, startPos);
 
@@ -258,17 +307,22 @@ public class Unit : MonoBehaviour {
         }
         else
         {
-            t += delta * moveSpeed;
-            if (t > 1)
-            {
-                t = 1;
-                initLerp = false;
-                curNode = targetNode;
-            }
-
-            Vector3 tp = Vector3.Lerp(startPos, targetPos, t);
-            transform.position = tp;
+            LerpIntoPosition(delta);
         }
+    }
+
+    void LerpIntoPosition(float delta)
+    {
+        t += delta * moveSpeed;
+        if (t > 1)
+        {
+            t = 1;
+            initLerp = false;
+            curNode = targetNode;
+        }
+
+        Vector3 tp = Vector3.Lerp(startPos, targetPos, t);
+        transform.position = tp;
     }
 
     void Bouncer()
@@ -288,7 +342,7 @@ public class Unit : MonoBehaviour {
                 break;
             case Ability.bouncer:
 
-                if (onGround)
+                if (previouslyGrounded)
                 {
                     FindStopNodes();
                     curAbility = a;
@@ -299,27 +353,39 @@ public class Unit : MonoBehaviour {
                     return false;
                 }
          
-            case Ability.umbrella:
-                curAbility = a;
+            case Ability.umbrella: 
                 isUmbrella = true;
                 unitAnimator.Play("Slowfall");
                 break;
+
             case Ability.dig_forward:
-                curAbility = a;
-                unitAnimator.Play("Digfront");
+                isDigForward = true;
+                digFCount = 0;
                 break;
+
             case Ability.dig_down:
-                curAbility = a;
-                unitAnimator.Play("Digbelow");
-                break;
+                if (previouslyGrounded)
+                {
+                    unitAnimator.Play("Digbelow");
+                    curAbility = a;
+                    digBCount = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                      
             case Ability.explode:
                 curAbility = a;
                 unitAnimator.Play("Explode");
                 break;
+
             case Ability.die:
                 curAbility = a;
-                unitAnimator.Play("Explode");
+                unitAnimator.Play("Die");
                 break;
+
             default:
                 break;
         }
@@ -327,6 +393,130 @@ public class Unit : MonoBehaviour {
         return true;
 
     }
+
+    void DigBelow(float delta)
+    {
+        if (!initLerp)
+        {
+            initLerp = true;
+            startPos = transform.position;
+
+            t = 0;
+
+            int t_x = (movingLeft) ? curNode.x + 1 : curNode.x - 1;
+
+            Node originNode = gameControl.GetNode(t_x, curNode.y + 3);
+
+            List<Node> nodes = CheckNode(originNode, 6);
+
+            if (nodes.Count == 0 || digBCount > digBelowLimit)
+            {
+                ChangeAbility(Ability.walker);
+                return;
+            }
+            digBCount++;
+   
+            gameControl.AddNodePossibilities(nodes);
+            Node n = gameControl.GetNode(curNode.x, curNode.y - 1);
+            if (n == null)
+            {
+                ChangeAbility(Ability.walker);
+                return;
+            }
+
+            targetNode = n;
+            targetPos = gameControl.GetWorldPosFromNode(targetNode);
+
+            float distance = Vector3.Distance(targetPos, startPos);
+            moveSpeed = dig_d_speed / distance;
+
+        }
+        else
+        {
+            LerpIntoPosition(delta);
+        }
+    }
+
+    void DigForward(float delta)
+    {
+        if (!initLerp)
+        {
+            initLerp = true;
+            startPos = transform.position;
+
+            t = 0;
+
+            int t_x = (movingLeft) ? curNode.x -2 : curNode.x + 2;
+
+            Node originNode = gameControl.GetNode(t_x -4, t_y + 8);
+
+            List<Node> nodes = CheckNode(originNode, 9);
+
+            if (nodes.Count == 0 || digFCount > digFrontLimit)
+            {
+                ChangeAbility(Ability.walker);
+                isDigForward = false;
+                return;
+            }
+            digFCount++;
+
+            gameControl.AddNodePossibilities(nodes);
+ 
+            Node n = gameControl.GetNode(t_x, curNode.y);
+
+            if (n == null)
+            {
+                ChangeAbility(Ability.walker);
+                return;
+            }
+
+            targetNode = n;
+            targetPos = gameControl.GetWorldPosFromNode(targetNode);
+
+            float distance = Vector3.Distance(targetPos, startPos);
+            moveSpeed = dig_d_speed / distance;
+
+        }
+        else
+        {
+            LerpIntoPosition(delta);
+        }
+    }
+
+    List<Node> CheckNode(Node origin, float rad)
+    {
+        List<Node> r = new List<Node>();
+        Vector3 center = gameControl.GetWorldPosFromNode(origin);
+        float radius = rad * gameControl.posOffset;
+
+        for (int x = -16; x < 16; x++)
+        {
+            for (int y = -16; y < 16; y++)
+            {
+                int t_x = x + curNode.x;
+                int t_y = y + curNode.y;
+
+                float d = Vector3.Distance(center, gameControl.GetWorldPosFromNode(t_x, t_y));
+                if (d > radius)
+                {
+                    continue;
+                }
+
+                Node n = gameControl.GetNode(t_x, t_y);
+                if (n == null)
+                {
+                    continue;
+                }
+                if (!n.isEmpty)
+                {
+                    r.Add(n);
+                }
+            }
+        }
+        return r;
+    }
+
+   
 
     void FindStopNodes()
     {

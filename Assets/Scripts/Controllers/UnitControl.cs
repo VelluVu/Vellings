@@ -56,6 +56,7 @@ public class UnitControl : MonoBehaviour {
             units[i].FrameTick(delta);
         }
 	}
+
     void SpawnLenny()
     {
         GameObject spawn = Instantiate(unitPrefab);
@@ -65,6 +66,7 @@ public class UnitControl : MonoBehaviour {
         units.Add(u);
         u.move = true;
     }
+
     void ChangeSpeedOfUnits(float t)
     {
         for (int i = 0; i < units.Count; i++)
@@ -73,6 +75,7 @@ public class UnitControl : MonoBehaviour {
         }
 
     }
+
     public Unit GetClosest(Vector3 origin)
     {
         float minDis = 0.1f;

@@ -30,6 +30,7 @@ public class UiControl : MonoBehaviour {
         canvas.SetActive(true);
     }
 
+    //Replaces Update, this is updated on GameControl class.
     public void FrameTick()
     {
         mTrans.transform.position = Input.mousePosition;
