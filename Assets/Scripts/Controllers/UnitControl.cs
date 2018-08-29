@@ -8,9 +8,9 @@ public class UnitControl : MonoBehaviour {
 
     float delta;
     float timer;
-    public float maxUnits = 10;
-    public float timeScale = 1;
-    public float Interval = 1;
+    float maxUnits = 10f;
+    float timeScale = 1.2f;
+    float Interval = 3f;
     public GameObject unitPrefab;
 
     GameObject unitsP;
@@ -95,5 +95,5 @@ public class UnitControl : MonoBehaviour {
 }
 public enum Ability
 {
-    walker, bouncer, umbrella, dig_forward, dig_down, explode, die
+    walker, bouncer, umbrella, dig_forward, dig_down, explode, builder, filler, die
 }

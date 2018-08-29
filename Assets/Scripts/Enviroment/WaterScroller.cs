@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WaterScroller : MonoBehaviour {
 
+    public float min;
     public float max;
     public float speed = 0.01f;
 
@@ -13,9 +14,9 @@ public class WaterScroller : MonoBehaviour {
         
         if (tp.x > max)
         {
-            tp.x = -max;
+            tp.x = min;
         }
-        if (tp.x < -max)
+        if (tp.x < min)
         {
             tp.x = max;
         }

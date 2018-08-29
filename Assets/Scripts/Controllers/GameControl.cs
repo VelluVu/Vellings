@@ -8,43 +8,43 @@ using UnityEngine.EventSystems;
 
 public class GameControl : MonoBehaviour
 {
-    //Declaring texture objects for level
+    
     public Texture2D levelTexture;
     Texture2D textureInstance;
     public SpriteRenderer levelRenderer;
 
-    //Declaring variables for max coordinates of area and offset of pixels.
     public float posOffset = 0.01f;
     int maxX;
     int maxY;
+    bool addTexture;
+    public float editRadius = 6;
+    private bool overUIElement;
 
-    //Declaring array of Nodes "pixel" we use to generate level matrix.
     Node[,] grid;
-
-    //Declaring Nodes for comparing the values.
     Node currentNode;
     Node previousNode;
 
-    //Declaring Vector3 for mouse position.
-    private Vector3 mousePos;
+    public Transform fillDebugObj;
+    public bool addFill;
+    public int pixelsOut;
+    public int maxPixels;
+    float f_t;
+    float p_t;
 
-    //Eraser
-    public float editRadius = 6;
-
-    //Spawning units
+    Unit curUnit;
     public Node spawnNode;
     public Transform spawnTransform;
     public Vector3 spawnPosition;
+    private Vector3 mousePos;
 
-    Unit curUnit;
-
+    public Color addedTextureColor = Color.green;
+    public Color fillColor = Color.yellow;
+    
+    //classes we need to use in our manager.
     public UnitControl unitControl;
     public UiControl uiControl;
-
-    private bool overUIElement;
-
-    public static GameControl singleton;
     
+    public static GameControl singleton;
 
     public void Awake()
     {
@@ -61,22 +61,6 @@ public class GameControl : MonoBehaviour
         spawnPosition = GetWorldPosFromNode(spawnNode);
     }
 
-    /// <summary>
-    /// This function that generates the level.
-    /// 
-    /// Initializes max X coordinate by texture width.
-    /// Y coordinate with texture height,
-    /// Builds the "GRID" Node object array and limits maximum coordinates.
-    /// At the sametime builds Texture2D object and changes it filter config to Point.
-    /// After this builds Node for each x and y value starting from 0 -> max X and max Y.
-    /// and sets the Node coordinate to current coordinates.
-    /// Then Creates Color which is initialized by the current color of texture coordinates.
-    /// then sets textureInstance pixel coordinates and color.
-    /// Also sets node isEmpty to be equal color zero.
-    /// Grid array x and y is equal to node values.
-    /// after looping through every coordinate / matrix.
-    /// applies the textureInstance, renders the map.
-    /// </summary>
     void CreateLevel()
     {
         maxX = levelTexture.width;
@@ -104,10 +88,9 @@ public class GameControl : MonoBehaviour
         }
         textureInstance.Apply();
         Rect rect = new Rect(0, 0, maxX, maxY);
-        levelRenderer.sprite = Sprite.Create(textureInstance, rect, Vector2.zero);
+        levelRenderer.sprite = Sprite.Create(textureInstance, rect, Vector2.zero, 100, 0, SpriteMeshType.FullRect);
     }
 
-    //Goes through these functions every "second".
     private void Update()
     {
         overUIElement = EventSystem.current.IsPointerOverGameObject();
@@ -115,20 +98,24 @@ public class GameControl : MonoBehaviour
         CheckForUnit();
         uiControl.FrameTick();
         HandleUnit();
+
+        if (addFill)
+        { 
+        DebugFill();
+        }
+
+        HandleFillNodes();
         ClearPixelList();
+        BuildNodeList();
+        
+        if (addTexture)
+        {
+            textureInstance.Apply();
+        }
+
         //HandleMouseInput();
     }
 
-    /// <summary>
-    /// This Function starts by checking if current node is null, will return instantly,
-    /// If it's not null it and left mouse button is pressed
-    /// and if current node is not previous node
-    /// it makes previous node to a current node.
-    /// Intializes Color c to color white then makes it transparent == 0.
-    /// Loops x and y size -6 to less than 6 "size of eraser" and
-    /// makes current "pixel" node transparent unless it's null "already transparent".
-    /// after loop aplies the change to the level texture.
-    /// </summary>
     void HandleMouseInput()
     {
         if (currentNode == null)
@@ -166,13 +153,13 @@ public class GameControl : MonoBehaviour
                             continue;
                         }
 
-                        n.isEmpty = true;
-                        textureInstance.SetPixel(t_x, t_y, c);
+                        //n.isEmpty = true;
+                        textureInstance.SetPixel(t_x, t_y, addedTextureColor);
 
                     }
                 }
 
-                textureInstance.Apply();
+                addTexture = true;
 
             }
         }
@@ -211,12 +198,6 @@ public class GameControl : MonoBehaviour
         uiControl.overUnit = true;
     }
 
-    /// <summary>
-    /// This Function initializes a ray as a point on the main camera screen area 
-    /// which takes the mouseposition as input.
-    /// Sets the mousePos to ray point
-    /// Current node is set to be the mouseposition from GetNodeFromWorldPosition function.
-    /// </summary>
     void GetMousePosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -224,16 +205,20 @@ public class GameControl : MonoBehaviour
         currentNode = GetNodeFromWorldPos(mousePos);
     }
 
-    List<Node> ClearNodes = new List<Node>();
 
-    public void AddNodePossibilities(List<Node> nlist)
+
+    List<Node> clearNodes = new List<Node>();
+    List<Node> buildNodes = new List<Node>();
+    List<FillNode> fillNodes = new List<FillNode>(); 
+    
+    public void AddNodePossibilitiesForRemoval(List<Node> nlist)
     {
-        ClearNodes.AddRange(nlist);
+        clearNodes.AddRange(nlist);
     }
 
     public void ClearPixelList()
     {
-        if (ClearNodes.Count == 0)
+        if (clearNodes.Count == 0)
         {
             return;
         }
@@ -241,26 +226,179 @@ public class GameControl : MonoBehaviour
         Color c = Color.white;
         c.a = 0;
 
-        for (int i = 0; i < ClearNodes.Count; i++)
+        for (int i = 0; i < clearNodes.Count; i++)
         {
-            ClearNodes[i].isEmpty = true;
-            textureInstance.SetPixel(ClearNodes[i].x, ClearNodes[i].y, c);
+            clearNodes[i].isEmpty = true;
+            textureInstance.SetPixel(clearNodes[i].x, clearNodes[i].y, c);
         }
 
-        ClearNodes.Clear();
-        textureInstance.Apply();
+        clearNodes.Clear();
+        addTexture = true;
 
     }
 
-    /// <summary>
-    /// This function takes Vector3 as parameter which we call wp "worldposition"
-    /// then it intializes int target X "t_x" coordinate 
-    /// to Rounded int from calculation wp.x coordinate divided by position offset.
-    /// Does the same for target Y "t_y" coordinate.
-    /// Then returns the node target coordinates.
-    /// </summary>
-    /// <param name="wp"></param>
-    /// <returns></returns>
+    public void AddPossibleNodesToSelection(List<Node> nlist)
+    {
+        buildNodes.AddRange(nlist);
+    }
+
+    void BuildNodeList()
+    {
+
+        if (buildNodes.Count == 0)
+        {
+            return;
+        }
+        
+
+        for (int i = 0; i < buildNodes.Count; i++)
+        {
+            buildNodes[i].isEmpty = false;
+            textureInstance.SetPixel(buildNodes[i].x, buildNodes[i].y, addedTextureColor);
+        }
+
+        buildNodes.Clear();
+        addTexture = true;
+
+    }
+
+    void DebugFill()
+    {
+        if(pixelsOut > maxPixels)
+        {
+            addFill = false;
+            return;
+        }
+        p_t += Time.deltaTime;
+
+        if (p_t > 0.05f)
+        {
+            pixelsOut++;
+            p_t = 0;
+        }
+        else
+        {
+            return;
+        }
+
+        Node n = GetNodeFromWorldPos(fillDebugObj.position);
+        FillNode f = new FillNode();
+        f.x = n.x;
+        f.y = n.y;
+        fillNodes.Add(f);
+        addTexture = true;
+    }
+
+    void HandleFillNodes()
+    {
+        f_t += Time.deltaTime;
+
+        if (f_t > 0.05f)
+        {
+            f_t = 0;
+        }
+        else
+        {
+            return;
+        }
+
+        if ( fillNodes.Count == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < fillNodes.Count; i++)
+        {
+            FillNode f = fillNodes[i];
+            Node cn = GetNode(f.x, f.y);
+
+            int _y = f.y;
+            _y--;
+
+            Node d = GetNode(f.x, _y);
+
+            if(d.isEmpty)
+            {
+                d.isEmpty = false;
+                textureInstance.SetPixel(d.x, d.y, fillColor);
+                f.y = _y;
+                clearNodes.Add(cn);
+            }
+            else
+            {
+
+                Node df = GetNode(f.x - 1, _y);
+                if (df.isEmpty)
+                {
+                    textureInstance.SetPixel(df.x, df.y, fillColor);
+                    f.y = _y;
+                    f.x -= 1;
+                    df.isEmpty = false;
+                    clearNodes.Add(cn);
+                }
+                else
+                {
+                    Node bf = GetNode(f.x + 1, _y);
+                    if (bf.isEmpty)
+                    {
+                        bf.isEmpty = false;
+                        textureInstance.SetPixel(bf.x, bf.y, fillColor);
+                        f.y = _y;
+                        f.x += 1;
+                        clearNodes.Add(cn);
+                    
+                    }
+                    else
+                    {
+                        f.t++;
+                        if (f.t > 4)
+                        {
+                            fillNodes.Remove(f);
+                        }
+                    }
+                }
+
+                /*int _x1 = (f.dropLeft) ? -1 : 1;
+                int _x2 = (f.dropLeft) ? 1 : -1;
+
+                Node df = GetNode(f.x + 1, _y);
+                if(df.isEmpty)
+                {
+                    df.isEmpty = false;
+                    textureInstance.SetPixel(df.x, df.y, fillColor);
+                    f.y = _y;
+                    f.x += _x1;
+                    clearNodes.Add(cn);
+                }
+                else
+                {
+
+                    Node db = GetNode(f.x + _x2, _y);
+                    if (db.isEmpty)
+                    {
+                        db.isEmpty = false;
+                        textureInstance.SetPixel(db.x, db.y, fillColor);
+                        f.y = _y;
+                        f.x += _x2;
+                        clearNodes.Add(db);
+                    }
+                    else
+                    {
+                        f.t++;
+                        if ( f.t > 5)
+                        {
+
+                        
+                        fillNodes.Remove(f);
+                        }
+                    }
+                }*/
+            }
+        }
+    }
+
+
+
     public Node GetNodeFromWorldPos(Vector3 wp)
     {
         int t_x = Mathf.RoundToInt(wp.x / posOffset);
@@ -269,14 +407,6 @@ public class GameControl : MonoBehaviour
         return GetNode(t_x, t_y);
     }
 
-    /// <summary>
-    /// This Function returns the Node array coordinates unless
-    /// Coordinate is less than 0 or higher than maximum texture size.
-    /// "To not break array bounds"
-    /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <returns></returns>
     public Node GetNode(int x, int y)
     {
         if (x < 0 || y < 0 || x > maxX - 1 || y > maxY - 1)
@@ -309,9 +439,6 @@ public class GameControl : MonoBehaviour
 
 }
 
-/// <summary>
-/// Class for One Pixel "Node" of game area.
-/// </summary>
 
 public class Node
 {
@@ -319,5 +446,13 @@ public class Node
     public int y;
     public bool isEmpty;
     public bool isStopped;
+}
+
+public class FillNode
+{
+    public int x;
+    public int y;
+    public int t;
+    public bool dropLeft;
 }
 

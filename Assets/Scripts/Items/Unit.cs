@@ -17,10 +17,15 @@ public class Unit : MonoBehaviour {
     public Ability curAbility;
 
     float moveSpeed;
-    float lerpSpeed = 0.3f;
+    float lerpSpeed = 0.2f;
     float fallSpeed = 3f;
     float umbrellaSpeed = 0.3f;
-    float dig_d_speed = 0.030f;
+    float dig_d_speed = 0.03f;
+    float build_Time = 0.9f;
+    float build_Speed =  0.03f;
+    float buildAmount = 25f;
+    int build_Count;
+    float b_t;
 
     float t;
     int t_x;
@@ -58,7 +63,6 @@ public class Unit : MonoBehaviour {
         transform.position = gameControl.spawnPosition;
     }
 	
-    //Replaces Update, this is updated on GameControl class.
 	public void FrameTick (float delta) {
 		
         if (!isInit)
@@ -90,6 +94,11 @@ public class Unit : MonoBehaviour {
             case Ability.dig_down:
                 DigBelow(delta);
                 break;
+            case Ability.builder:
+                Builder(delta);
+                break;
+            case Ability.filler:
+                break;
             case Ability.explode:
                 break;
             case Ability.die:
@@ -99,6 +108,81 @@ public class Unit : MonoBehaviour {
         }
 
 	}
+
+    public bool ChangeAbility(Ability a)
+    {
+        isUmbrella = false;
+
+        switch (a)
+        {
+            case Ability.walker:
+                curAbility = a;
+                unitAnimator.Play("Walking");
+                break;
+            case Ability.bouncer:
+
+                if (previouslyGrounded)
+                {
+                    FindStopNodes();
+                    curAbility = a;
+                    unitAnimator.Play("Bouncer");
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            case Ability.umbrella:
+                isUmbrella = true;
+                unitAnimator.Play("Slowfall");
+                break;
+
+            case Ability.dig_forward:
+                isDigForward = true;
+                digFCount = 0;
+                break;
+
+            case Ability.dig_down:
+                if (previouslyGrounded)
+                {
+                    unitAnimator.Play("Digbelow");
+                    curAbility = a;
+                    digBCount = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            case Ability.filler:
+                curAbility = a;
+                break;
+
+            case Ability.builder:
+                unitAnimator.Play("Build");
+                curAbility = a;
+                build_Count = 0;
+                break;
+
+            case Ability.explode:
+                curAbility = a;
+                unitAnimator.Play("Explode");
+                break;
+
+            case Ability.die:
+                curAbility = a;
+                unitAnimator.Play("Die");
+                break;
+
+            default:
+                break;
+        }
+
+        return true;
+
+    }
 
     bool Pathfind()
     {
@@ -141,7 +225,7 @@ public class Unit : MonoBehaviour {
             //land on ground
             if(onGround && !previouslyGrounded)
             {
-                Debug.Log(airLimit);
+                //Debug.Log(airLimit);
                 if (airLimit > deathFallLimit && !isUmbrella)
                 {
                     targetNode = curNode;
@@ -329,71 +413,69 @@ public class Unit : MonoBehaviour {
     {
 
     }
-    
-    public bool ChangeAbility(Ability a)
+
+    void Builder(float delta)
     {
-        isUmbrella = false;
-
-        switch(a)
+        if (!initLerp)
         {
-            case Ability.walker:
-                curAbility = a;
-                unitAnimator.Play("Walking");
-                break;
-            case Ability.bouncer:
-
-                if (previouslyGrounded)
+            b_t += delta;
+           
+            if ( b_t > build_Time)
+            {
+                
+                b_t = 0;
+                initLerp = true;
+                bool interrupt = false;
+                build_Count++;
+              
+                if (build_Count > buildAmount)
                 {
-                    FindStopNodes();
-                    curAbility = a;
-                    unitAnimator.Play("Bouncer");
-                    return true;
-                } else
-                {
-                    return false;
+                    interrupt = true;
                 }
-         
-            case Ability.umbrella: 
-                isUmbrella = true;
-                unitAnimator.Play("Slowfall");
-                break;
+                
+                int _tx = curNode.x;
+                int _ty = curNode.y;
+                _tx = (movingLeft) ? _tx - 1 : _tx + 1;
+                _ty++;   
 
-            case Ability.dig_forward:
-                isDigForward = true;
-                digFCount = 0;
-                break;
-
-            case Ability.dig_down:
-                if (previouslyGrounded)
+                startPos = transform.position;
+                targetNode = gameControl.GetNode(_tx, _ty);     
+                
+                if ( targetNode.isEmpty == false || interrupt)
                 {
-                    unitAnimator.Play("Digbelow");
-                    curAbility = a;
-                    digBCount = 0;
-                    return true;
+                    ChangeAbility(Ability.walker);
+                    return;
                 }
-                else
+                
+                targetPos = gameControl.GetWorldPosFromNode(targetNode.x, targetNode.y);
+                float dist = Vector3.Distance(startPos, targetPos);
+                
+                moveSpeed = build_Speed / dist;
+                Debug.Log(moveSpeed);
+                
+                
+
+                List<Node> possibleNodes = new List<Node>();
+
+                for (int i = -1; i < 6; i++)
                 {
-                    return false;
+                    int size = _tx + i;
+                    Node n = gameControl.GetNode(size, curNode.y);
+
+                    if (n.isEmpty == true)
+                    {
+                        possibleNodes.Add(n);
+                    } 
                 }
-                      
-            case Ability.explode:
-                curAbility = a;
-                unitAnimator.Play("Explode");
-                break;
-
-            case Ability.die:
-                curAbility = a;
-                unitAnimator.Play("Die");
-                break;
-
-            default:
-                break;
+                gameControl.AddPossibleNodesToSelection(possibleNodes);
+            }
         }
-
-        return true;
-
+        else
+        {
+            LerpIntoPosition(delta);
+        }
     }
-
+    
     void DigBelow(float delta)
     {
         if (!initLerp)
@@ -416,7 +498,7 @@ public class Unit : MonoBehaviour {
             }
             digBCount++;
    
-            gameControl.AddNodePossibilities(nodes);
+            gameControl.AddNodePossibilitiesForRemoval(nodes);
             Node n = gameControl.GetNode(curNode.x, curNode.y - 1);
             if (n == null)
             {
@@ -460,7 +542,7 @@ public class Unit : MonoBehaviour {
             }
             digFCount++;
 
-            gameControl.AddNodePossibilities(nodes);
+            gameControl.AddNodePossibilitiesForRemoval(nodes);
  
             Node n = gameControl.GetNode(t_x, curNode.y);
 

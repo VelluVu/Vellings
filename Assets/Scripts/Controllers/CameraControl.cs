@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraControl : MonoBehaviour {
 
-    public float moveSpeed = 0.01f;
+    public float camMoveSpeed = 0.01f;
     public Transform camTrans;
 
     public float minX;
@@ -26,8 +26,8 @@ public class CameraControl : MonoBehaviour {
         float xAxis = Input.GetAxis("Horizontal");
         moveCam = Vector3.zero;
         float yAxis = Input.GetAxis("Vertical");
-        moveCam.x = xAxis * moveSpeed;
-        moveCam.y = yAxis * moveSpeed;
+        moveCam.x = xAxis * camMoveSpeed;
+        moveCam.y = yAxis * camMoveSpeed;
 
         Vector3 targetPosition = camTrans.position;
         targetPosition += moveCam;
