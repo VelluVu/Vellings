@@ -47,7 +47,7 @@ public class UnitControl : MonoBehaviour {
             if (timer < 0)
             {
                 timer = Interval;
-                SpawnLenny();
+                SpawnUnit();
             }
         }
 
@@ -57,7 +57,7 @@ public class UnitControl : MonoBehaviour {
         }
 	}
 
-    void SpawnLenny()
+    void SpawnUnit()
     {
         GameObject spawn = Instantiate(unitPrefab);
         spawn.transform.parent = unitsP.transform;

@@ -5,14 +5,14 @@ using UnityEngine;
 public class Unit : MonoBehaviour {
 
     bool isInit;
-    public bool move;
-    public bool onGround;
     bool previouslyGrounded;
     bool movingLeft;
     bool initLerp;
-
-    public bool isUmbrella;
-    public bool isDigForward;
+    bool isUmbrella;
+    bool isDigForward;
+    public bool move;
+    bool onGround;
+    bool startFilling;
 
     public Ability curAbility;
 
@@ -24,19 +24,25 @@ public class Unit : MonoBehaviour {
     float build_Time = 0.9f;
     float build_Speed =  0.03f;
     float buildAmount = 25f;
-    int build_Count;
+    float startFill = 3.1f;
+    float sf_t;
+    float f_t;
+    float p_t;
     float b_t;
-
     float t;
     int t_x;
     int t_y;
 
     int airLimit;
-    public int digFrontLimit = 40;
-    int digFCount;
-    public int digBelowLimit = 30;
     int digBCount;
+    int build_Count;
+    int digFCount;
+    
     public int deathFallLimit = 70;
+    public int digBelowLimit = 30;
+    public int digFrontLimit = 40;
+    public int pixelAmount;
+    public int maxPixels = 80;
 
     Node curNode;
     Node targetNode;
@@ -98,6 +104,7 @@ public class Unit : MonoBehaviour {
                 Builder(delta);
                 break;
             case Ability.filler:
+                Filler(delta);
                 break;
             case Ability.explode:
                 break;
@@ -158,6 +165,12 @@ public class Unit : MonoBehaviour {
 
             case Ability.filler:
                 curAbility = a;
+                unitAnimator.Play("Begin_fill");
+                startFilling = false;
+                sf_t = 0;
+                f_t = 0;
+                p_t = 0;
+                pixelAmount = 0;
                 break;
 
             case Ability.builder:
@@ -474,6 +487,47 @@ public class Unit : MonoBehaviour {
         {
             LerpIntoPosition(delta);
         }
+    }
+
+    void Filler(float delta)
+    {
+        if (!startFilling)
+        {
+            sf_t += delta;
+
+            if (sf_t < startFill)
+            {
+                startFilling = true;
+            }
+        }
+
+        if (pixelAmount > maxPixels)
+        {
+            ChangeAbility(Ability.walker);
+            return;
+        }
+
+        p_t += delta;
+
+        if (p_t > 0.05f)
+        {
+            pixelAmount++;
+            p_t = 0;
+        }
+        else
+        {
+            return;
+        }
+
+        int _x = (movingLeft) ? curNode.x - 3 : curNode.x + 3;
+        int _y = curNode.y + 4;
+
+        Node n = gameControl.GetNode(_x,_y);
+        FillNode f = new FillNode();
+        f.x = n.x;
+        f.y = n.y;
+        gameControl.AddFillNode(f);
+
     }
     
     void DigBelow(float delta)

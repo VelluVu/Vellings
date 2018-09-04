@@ -101,13 +101,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   move: 1
-  onGround: 0
-  isUmbrella: 0
-  isDigForward: 0
   curAbility: 0
-  digFrontLimit: 40
-  digBelowLimit: 30
   deathFallLimit: 70
+  digBelowLimit: 30
+  digFrontLimit: 40
+  pixelAmount: 0
+  maxPixels: 25
   ren: {fileID: 212437776975309696}
   unitAnimator: {fileID: 95098359712044568}
 --- !u!212 &212437776975309696

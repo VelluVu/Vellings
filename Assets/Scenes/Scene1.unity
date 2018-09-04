@@ -441,7 +441,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 127790613}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.81, y: 1.47, z: 0.0063324003}
+  m_LocalPosition: {x: 2.827, y: 1.563, z: 0.0063324003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -602,16 +602,6 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1134111046000902, guid: 8e3aa0a408ef4be43ba75aad1d7a5bf1, type: 2}
       propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114551622019541502, guid: 8e3aa0a408ef4be43ba75aad1d7a5bf1,
-        type: 2}
-      propertyPath: build_Time
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114551622019541502, guid: 8e3aa0a408ef4be43ba75aad1d7a5bf1,
-        type: 2}
-      propertyPath: build_Speed
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -2968,12 +2958,13 @@ MonoBehaviour:
   editRadius: 6
   fillDebugObj: {fileID: 127790614}
   addFill: 1
-  pixelsOut: 44
+  pixelAmount: 0
   maxPixels: 444
   spawnTransform: {fileID: 733526401}
   spawnPosition: {x: 0, y: 0, z: 0}
   addedTextureColor: {r: 0.6698113, g: 0.4438667, b: 0, a: 1}
   fillColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  shadyCOlor: {r: 0, g: 1, b: 1, a: 1}
   unitControl: {fileID: 0}
   uiControl: {fileID: 0}
 --- !u!114 &1484240107

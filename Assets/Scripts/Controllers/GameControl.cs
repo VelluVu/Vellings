@@ -26,7 +26,7 @@ public class GameControl : MonoBehaviour
 
     public Transform fillDebugObj;
     public bool addFill;
-    public int pixelsOut;
+    public int pixelAmount;
     public int maxPixels;
     float f_t;
     float p_t;
@@ -39,6 +39,7 @@ public class GameControl : MonoBehaviour
 
     public Color addedTextureColor = Color.green;
     public Color fillColor = Color.yellow;
+    public Color shadyCOlor = Color.magenta;
     
     //classes we need to use in our manager.
     public UnitControl unitControl;
@@ -101,7 +102,7 @@ public class GameControl : MonoBehaviour
 
         if (addFill)
         { 
-        DebugFill();
+        //DebugFill();
         }
 
         HandleFillNodes();
@@ -205,8 +206,6 @@ public class GameControl : MonoBehaviour
         currentNode = GetNodeFromWorldPos(mousePos);
     }
 
-
-
     List<Node> clearNodes = new List<Node>();
     List<Node> buildNodes = new List<Node>();
     List<FillNode> fillNodes = new List<FillNode>(); 
@@ -264,7 +263,7 @@ public class GameControl : MonoBehaviour
 
     void DebugFill()
     {
-        if(pixelsOut > maxPixels)
+        if(pixelAmount > maxPixels)
         {
             addFill = false;
             return;
@@ -273,7 +272,7 @@ public class GameControl : MonoBehaviour
 
         if (p_t > 0.05f)
         {
-            pixelsOut++;
+            pixelAmount++;
             p_t = 0;
         }
         else
@@ -317,7 +316,13 @@ public class GameControl : MonoBehaviour
 
             Node d = GetNode(f.x, _y);
 
-            if(d.isEmpty)
+            if (d == null)
+            {
+                fillNodes.Remove(f);
+                continue;
+            }
+
+            if (d.isEmpty)
             {
                 d.isEmpty = false;
                 textureInstance.SetPixel(d.x, d.y, fillColor);
@@ -328,9 +333,16 @@ public class GameControl : MonoBehaviour
             {
 
                 Node df = GetNode(f.x - 1, _y);
+
+                /*if (df == null)
+                {
+                    fillNodes.Remove(f);
+                    continue;
+                }*/
+
                 if (df.isEmpty)
                 {
-                    textureInstance.SetPixel(df.x, df.y, fillColor);
+                    textureInstance.SetPixel(df.x, df.y, shadyCOlor);
                     f.y = _y;
                     f.x -= 1;
                     df.isEmpty = false;
@@ -351,53 +363,21 @@ public class GameControl : MonoBehaviour
                     else
                     {
                         f.t++;
-                        if (f.t > 4)
+                        if (f.t > 15)
                         {
+                            Node _cn = GetNode(f.x, f.y);                    
                             fillNodes.Remove(f);
                         }
                     }
                 }
-
-                /*int _x1 = (f.dropLeft) ? -1 : 1;
-                int _x2 = (f.dropLeft) ? 1 : -1;
-
-                Node df = GetNode(f.x + 1, _y);
-                if(df.isEmpty)
-                {
-                    df.isEmpty = false;
-                    textureInstance.SetPixel(df.x, df.y, fillColor);
-                    f.y = _y;
-                    f.x += _x1;
-                    clearNodes.Add(cn);
-                }
-                else
-                {
-
-                    Node db = GetNode(f.x + _x2, _y);
-                    if (db.isEmpty)
-                    {
-                        db.isEmpty = false;
-                        textureInstance.SetPixel(db.x, db.y, fillColor);
-                        f.y = _y;
-                        f.x += _x2;
-                        clearNodes.Add(db);
-                    }
-                    else
-                    {
-                        f.t++;
-                        if ( f.t > 5)
-                        {
-
-                        
-                        fillNodes.Remove(f);
-                        }
-                    }
-                }*/
             }
         }
     }
 
-
+    public void AddFillNode(FillNode f)
+    {
+        fillNodes.Add(f);
+    }
 
     public Node GetNodeFromWorldPos(Vector3 wp)
     {
@@ -437,6 +417,13 @@ public class GameControl : MonoBehaviour
         return r;
     }
 
+    public override bool Equals(object obj)
+    {
+        var control = obj as GameControl;
+        return control != null &&
+               base.Equals(obj) &&
+               overUIElement == control.overUIElement;
+    }
 }
 
 
