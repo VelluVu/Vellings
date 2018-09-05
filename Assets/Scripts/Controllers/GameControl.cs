@@ -38,7 +38,7 @@ public class GameControl : MonoBehaviour
     private Vector3 mousePos;
 
     public Color addedTextureColor = Color.green;
-    public Color fillColor = Color.yellow;
+    public Color fillColor = Color.magenta;
     public Color shadyCOlor = Color.magenta;
     
     //classes we need to use in our manager.
@@ -334,11 +334,11 @@ public class GameControl : MonoBehaviour
 
                 Node df = GetNode(f.x - 1, _y);
 
-                /*if (df == null)
+                if (df == null)
                 {
                     fillNodes.Remove(f);
                     continue;
-                }*/
+                }
 
                 if (df.isEmpty)
                 {

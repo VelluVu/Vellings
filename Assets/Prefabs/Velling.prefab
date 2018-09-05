@@ -106,7 +106,7 @@ MonoBehaviour:
   digBelowLimit: 30
   digFrontLimit: 40
   pixelAmount: 0
-  maxPixels: 25
+  maxPixels: 222
   ren: {fileID: 212437776975309696}
   unitAnimator: {fileID: 95098359712044568}
 --- !u!212 &212437776975309696

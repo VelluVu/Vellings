@@ -53,3 +53,6 @@ TagManager:
   - name: Foreground
     uniqueID: 3644200167
     locked: 0
+  - name: EvenMoreForeground
+    uniqueID: 2749922595
+    locked: 0
