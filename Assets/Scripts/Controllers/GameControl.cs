@@ -181,6 +181,7 @@ public class GameControl : MonoBehaviour
             if (curUnit.curAbility == Ability.walker)
             {
                 curUnit.ChangeAbility(uiControl.targetAbility);
+                
             }
         }
     }
@@ -228,6 +229,7 @@ public class GameControl : MonoBehaviour
         for (int i = 0; i < clearNodes.Count; i++)
         {
             clearNodes[i].isEmpty = true;
+            clearNodes[i].isFiller = false;
             textureInstance.SetPixel(clearNodes[i].x, clearNodes[i].y, c);
         }
 
@@ -310,6 +312,7 @@ public class GameControl : MonoBehaviour
         {
             FillNode f = fillNodes[i];
             Node cn = GetNode(f.x, f.y);
+            cn.isFiller = true;
 
             int _y = f.y;
             _y--;
@@ -325,6 +328,7 @@ public class GameControl : MonoBehaviour
             if (d.isEmpty)
             {
                 d.isEmpty = false;
+                d.isFiller = true;
                 textureInstance.SetPixel(d.x, d.y, fillColor);
                 f.y = _y;
                 clearNodes.Add(cn);
@@ -346,6 +350,7 @@ public class GameControl : MonoBehaviour
                     f.y = _y;
                     f.x -= 1;
                     df.isEmpty = false;
+                    df.isFiller = true;
                     clearNodes.Add(cn);
                 }
                 else
@@ -354,6 +359,7 @@ public class GameControl : MonoBehaviour
                     if (bf.isEmpty)
                     {
                         bf.isEmpty = false;
+                        bf.isFiller = true;
                         textureInstance.SetPixel(bf.x, bf.y, fillColor);
                         f.y = _y;
                         f.x += 1;
@@ -365,7 +371,8 @@ public class GameControl : MonoBehaviour
                         f.t++;
                         if (f.t > 15)
                         {
-                            Node _cn = GetNode(f.x, f.y);                    
+                            Node _cn = GetNode(f.x, f.y);
+                            _cn.isFiller = false;
                             fillNodes.Remove(f);
                         }
                     }
@@ -433,6 +440,7 @@ public class Node
     public int y;
     public bool isEmpty;
     public bool isStopped;
+    public bool isFiller;
 }
 
 public class FillNode

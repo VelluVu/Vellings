@@ -25,14 +25,17 @@ public class Unit : MonoBehaviour {
     float build_Speed =  0.03f;
     float buildAmount = 25f;
     float startFill = 3.1f;
-    float sf_t;
-    float f_t;
-    float p_t;
-    float b_t;
+    float startfill_t;
+    float fill_t;
+    float pix_t;
+    float build_t;
     float t;
+    float explodeTimer = 1.10f;
+    float explodeRadius = 12f;
+    float explode_t;
+
     int t_x;
     int t_y;
-
     int airLimit;
     int digBCount;
     int build_Count;
@@ -95,7 +98,7 @@ public class Unit : MonoBehaviour {
                 Bouncer();
                 break;
             case Ability.dig_forward:
-                DigForward(delta);
+                DigForward(delta); 
                 break;
             case Ability.dig_down:
                 DigBelow(delta);
@@ -103,10 +106,11 @@ public class Unit : MonoBehaviour {
             case Ability.builder:
                 Builder(delta);
                 break;
-            case Ability.filler:
-                Filler(delta);
+            case Ability.filler:     
+                Filler(delta);                
                 break;
             case Ability.explode:
+                Explodes(delta);
                 break;
             case Ability.die:
                 break;
@@ -126,6 +130,7 @@ public class Unit : MonoBehaviour {
                 curAbility = a;
                 unitAnimator.Play("Walking");
                 break;
+
             case Ability.bouncer:
 
                 if (previouslyGrounded)
@@ -146,7 +151,9 @@ public class Unit : MonoBehaviour {
                 break;
 
             case Ability.dig_forward:
-                isDigForward = true;
+                //isDigForward = true;
+                unitAnimator.Play("Digfront");
+                curAbility = a;
                 digFCount = 0;
                 break;
 
@@ -167,9 +174,9 @@ public class Unit : MonoBehaviour {
                 curAbility = a;
                 unitAnimator.Play("Begin_fill");
                 startFilling = false;
-                sf_t = 0;
-                f_t = 0;
-                p_t = 0;
+                startfill_t = 0;
+                fill_t = 0;
+                pix_t = 0;
                 pixelAmount = 0;
                 break;
 
@@ -182,6 +189,8 @@ public class Unit : MonoBehaviour {
             case Ability.explode:
                 curAbility = a;
                 unitAnimator.Play("Explode");
+                
+                explode_t = 0;
                 break;
 
             case Ability.die:
@@ -345,7 +354,12 @@ public class Unit : MonoBehaviour {
         {
             return true;
         }
-        return n.isEmpty;
+        bool isAir = n.isEmpty;
+        if (n.isFiller)
+        {
+            isAir = true;
+        }
+        return isAir;
     }
 
     bool IsStopped(int x, int y)
@@ -356,6 +370,14 @@ public class Unit : MonoBehaviour {
             return false;
         }
         return n.isStopped;
+    }
+
+    void Bouncer()
+    {
+        if (CheckNodeBelow() || CheckCurrentNode())
+        {
+            ClearStopNodes();
+        }
     }
 
     void Walker(float delta)
@@ -422,8 +444,39 @@ public class Unit : MonoBehaviour {
         transform.position = tp;
     }
 
-    void Bouncer()
+    bool CheckNodeBelow()
     {
+        Node below = gameControl.GetNode(curNode.x, curNode.y - 2);
+
+        if (below != null)
+        {
+
+            if (below.isEmpty)
+            {
+                ChangeAbility(Ability.walker);
+                return true;
+            }
+
+        }
+        else
+        {
+            ChangeAbility(Ability.walker);
+            return true;
+        }
+        return false;
+    }
+
+    bool CheckCurrentNode()
+    {
+        
+
+        if (curNode.isEmpty == false)
+        {
+            ChangeAbility(Ability.walker);
+            return true;
+        }
+
+        return false;
 
     }
 
@@ -431,12 +484,12 @@ public class Unit : MonoBehaviour {
     {
         if (!initLerp)
         {
-            b_t += delta;
+            build_t += delta;
            
-            if ( b_t > build_Time)
+            if ( build_t > build_Time)
             {
                 
-                b_t = 0;
+                build_t = 0;
                 initLerp = true;
                 bool interrupt = false;
                 build_Count++;
@@ -493,9 +546,9 @@ public class Unit : MonoBehaviour {
     {
         if (!startFilling)
         {
-            sf_t += delta;
+            startfill_t += delta;
 
-            if (sf_t < startFill)
+            if (startfill_t < startFill)
             {
                 startFilling = true;
             }
@@ -507,12 +560,12 @@ public class Unit : MonoBehaviour {
             return;
         }
 
-        p_t += delta;
+        pix_t += delta;
 
-        if (p_t > 0.05f)
+        if (pix_t > 0.05f)
         {
             pixelAmount++;
-            p_t = 0;
+            pix_t = 0;
         }
         else
         {
@@ -588,7 +641,7 @@ public class Unit : MonoBehaviour {
 
             List<Node> nodes = CheckNode(originNode, 9);
 
-            if (nodes.Count == 0 || digFCount > digFrontLimit)
+            if (digFCount > 0 && (nodes.Count < 2 || digFCount > digFrontLimit))
             {
                 ChangeAbility(Ability.walker);
                 isDigForward = false;
@@ -616,6 +669,46 @@ public class Unit : MonoBehaviour {
         else
         {
             LerpIntoPosition(delta);
+        }
+    }
+
+    void Explodes(float delta)
+    {
+        explode_t += delta;
+
+        if (explode_t > explodeTimer)
+        {
+            ChangeAbility(Ability.explode);
+
+            float radius = explodeRadius * 0.01f;
+            int steps = Mathf.RoundToInt(explodeRadius);
+            Vector3 center = transform.position;
+            List<Node> nodes = new List<Node>();
+
+            for (int x = -steps; x < steps; x++)
+            {
+                for (int y = -steps; y < steps; y++)
+                {
+                    int t_x = x + curNode.x;
+                    int t_y = y + curNode.y;
+
+                    float d = Vector3.Distance(center, gameControl.GetWorldPosFromNode(t_x, t_y));
+                    if (d > radius)
+                    {
+                        continue;
+                    }
+
+                    Node n = gameControl.GetNode(t_x, t_y);
+                    if (n == null)
+                    {
+                        continue;
+                    }
+
+                    nodes.Add(n);
+                }
+            }
+            gameControl.AddNodePossibilitiesForRemoval(nodes);
+            
         }
     }
 
@@ -651,8 +744,6 @@ public class Unit : MonoBehaviour {
         }
         return r;
     }
-
-   
 
     void FindStopNodes()
     {
