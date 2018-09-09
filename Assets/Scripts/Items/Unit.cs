@@ -189,7 +189,6 @@ public class Unit : MonoBehaviour {
             case Ability.explode:
                 curAbility = a;
                 unitAnimator.Play("Explode");
-                
                 explode_t = 0;
                 break;
 
@@ -708,7 +707,7 @@ public class Unit : MonoBehaviour {
                 }
             }
             gameControl.AddNodePossibilitiesForRemoval(nodes);
-            
+            UnitControl.FindObjectOfType<UnitControl>().DeleteUnit(this);
         }
     }
 

@@ -67,6 +67,12 @@ public class UnitControl : MonoBehaviour {
         u.move = true;
     }
 
+    public void DeleteUnit(Unit curUnit)
+    {
+        units.Remove(curUnit);
+        maxUnits--;
+    }
+
     void ChangeSpeedOfUnits(float t)
     {
         for (int i = 0; i < units.Count; i++)

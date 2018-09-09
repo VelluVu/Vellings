@@ -181,7 +181,7 @@ public class GameControl : MonoBehaviour
             if (curUnit.curAbility == Ability.walker)
             {
                 curUnit.ChangeAbility(uiControl.targetAbility);
-                
+               
             }
         }
     }
