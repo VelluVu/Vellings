@@ -12,6 +12,7 @@ public class UiControl : MonoBehaviour {
     public Sprite cTarget1;
     public Sprite cTarget2;
     public Sprite cSelection;
+    public Text vellingCount;
 
     public bool overUnit;
     public bool chooseAbility;
@@ -59,6 +60,12 @@ public class UiControl : MonoBehaviour {
     }
 
     public static UiControl singleton;
+
+    public void IncrementVellingCounter(int count)
+    {
+        vellingCount.text = "" + count;
+
+    }
 
     void Awake()
     {

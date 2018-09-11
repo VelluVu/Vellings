@@ -11,6 +11,16 @@ public class GameControl : MonoBehaviour
     
     public Texture2D levelTexture;
     Texture2D textureInstance;
+
+    public Texture2D GetTextureInstance()
+    {
+        return textureInstance;
+    }
+    public void SetTextureInstance(Texture2D t)
+    {
+        textureInstance = t;
+    }
+
     public SpriteRenderer levelRenderer;
 
     public float posOffset = 0.01f;

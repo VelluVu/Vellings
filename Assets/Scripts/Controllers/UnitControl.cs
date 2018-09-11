@@ -5,14 +5,17 @@ using UnityEngine;
 public class UnitControl : MonoBehaviour {
 
     public bool changeSpeed;
-
+    int count;
     float delta;
     float timer;
-    float maxUnits = 10f;
-    float timeScale = 1.2f;
-    float Interval = 3f;
-    public GameObject unitPrefab;
+    int maxUnits;
+    float timeScale;
+    float Interval;
+    float momentBeforeSpawning;
+    float timeToEnrage;
 
+    public GameObject unitPrefab;
+    public Animator spawnAnim;
     GameObject unitsP;
     List<Unit> units = new List<Unit>();
 
@@ -21,15 +24,27 @@ public class UnitControl : MonoBehaviour {
     private void Awake()
     {
         singleton = this;
+        spawnAnim.SetBool("spawnNow", true);
+        
     }
-
+    
     void Start () {
+        count = 0;
+        Interval = 2f;
+        timeToEnrage = 500f;
+        maxUnits = 10;
+        momentBeforeSpawning = 1.5f;
+
         unitsP = new GameObject();
         unitsP.name = "units parent";
-	}
+
+        StartCoroutine(WaitStart(momentBeforeSpawning));
+        StartCoroutine(Enrage(timeToEnrage));
+
+    }
 	
 	void Update () {
-
+        
         delta = Time.deltaTime;
         delta *= timeScale;
 
@@ -38,16 +53,22 @@ public class UnitControl : MonoBehaviour {
             changeSpeed = false;
             ChangeSpeedOfUnits(timeScale);
         }
-
+        if (units.Count == maxUnits)
+        {
+            spawnAnim.SetBool("spawnNow", false);
+            count = 0;
+        }
         if (units.Count < maxUnits)
         {
-
-
+            
+            
             timer -= delta;
             if (timer < 0)
-            {
+            {              
                 timer = Interval;
                 SpawnUnit();
+                count++;
+                UiControl.FindObjectOfType<UiControl>().IncrementVellingCounter(count);
             }
         }
 
@@ -59,6 +80,7 @@ public class UnitControl : MonoBehaviour {
 
     void SpawnUnit()
     {
+        
         GameObject spawn = Instantiate(unitPrefab);
         spawn.transform.parent = unitsP.transform;
         Unit u = spawn.GetComponent<Unit>();
@@ -72,7 +94,7 @@ public class UnitControl : MonoBehaviour {
         units.Remove(curUnit);
         maxUnits--;
     }
-
+    
     void ChangeSpeedOfUnits(float t)
     {
         for (int i = 0; i < units.Count; i++)
@@ -80,6 +102,20 @@ public class UnitControl : MonoBehaviour {
             units[i].unitAnimator.speed = t;
         }
 
+    }
+
+    IEnumerator WaitStart(float momentBeforeSpawning)
+    {
+        timeScale = 0;
+        yield return new WaitForSeconds(momentBeforeSpawning);
+        Debug.Log("YOU WAITED" + momentBeforeSpawning);
+        timeScale = 1f;
+    }
+    IEnumerator Enrage(float timeToEnrage)
+    {
+        yield return new WaitForSecondsRealtime(timeToEnrage);
+        Debug.Log("Enrage");
+        timeScale = 5f;
     }
 
     public Unit GetClosest(Vector3 origin)

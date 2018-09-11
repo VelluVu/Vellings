@@ -697,7 +697,7 @@ public class Unit : MonoBehaviour {
                         continue;
                     }
 
-                    Node n = gameControl.GetNode(t_x, t_y);
+                    Node n = gameControl.GetNode(t_x, t_y + 6);
                     if (n == null)
                     {
                         continue;
@@ -768,5 +768,10 @@ public class Unit : MonoBehaviour {
             stoppedNodes[i].isStopped = false;
         }
         stoppedNodes.Clear();
+    }
+
+    public void ReachEnd()
+    {
+        UnitControl.FindObjectOfType<UnitControl>().DeleteUnit(this);
     }
 }
