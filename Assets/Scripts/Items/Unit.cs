@@ -634,9 +634,9 @@ public class Unit : MonoBehaviour {
 
             t = 0;
 
-            int t_x = (movingLeft) ? curNode.x -2 : curNode.x + 2;
+            int t_x = (movingLeft) ? curNode.x - 2 : curNode.x + 2;
 
-            Node originNode = gameControl.GetNode(t_x -4, t_y + 8);
+            Node originNode = gameControl.GetNode(t_x , t_y + 8);
 
             List<Node> nodes = CheckNode(originNode, 9);
 
