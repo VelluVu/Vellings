@@ -4,34 +4,33 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour {
 
+    public bool move;
+
     bool isInit;
     bool previouslyGrounded;
     bool movingLeft;
     bool initLerp;
     bool isUmbrella;
     bool isDigForward;
-    public bool move;
     bool onGround;
     bool startFilling;
 
-    public Ability curAbility;
-
     float moveSpeed;
-    float lerpSpeed = 0.2f;
-    float fallSpeed = 3f;
-    float umbrellaSpeed = 0.3f;
-    float dig_d_speed = 0.03f;
-    float build_Time = 0.9f;
-    float build_Speed =  0.03f;
-    float buildAmount = 25f;
-    float startFill = 3.1f;
+    float lerpSpeed;
+    float fallSpeed;
+    float umbrellaSpeed;
+    float dig_d_speed;
+    float build_Time;
+    float build_Speed;
+    float buildAmount;
+    float startFill;
     float startfill_t;
     float fill_t;
     float pix_t;
     float build_t;
     float t;
-    float explodeTimer = 1.10f;
-    float explodeRadius = 12f;
+    float explodeTimer;
+    float explodeRadius;
     float explode_t;
 
     int t_x;
@@ -40,12 +39,13 @@ public class Unit : MonoBehaviour {
     int digBCount;
     int build_Count;
     int digFCount;
-    
-    public int deathFallLimit = 70;
-    public int digBelowLimit = 30;
-    public int digFrontLimit = 40;
+    int deathFallLimit;
+    int digBelowLimit;
+    int digFrontLimit;
+    int maxPixels;
+
     public int pixelAmount;
-    public int maxPixels = 80;
+    public Ability curAbility;
 
     Node curNode;
     Node targetNode;
@@ -64,7 +64,22 @@ public class Unit : MonoBehaviour {
         PlaceOnNode();
         isInit = true;
         curAbility = Ability.walker;
-	}
+        lerpSpeed = 0.2f;
+        fallSpeed = 3f;
+        umbrellaSpeed = 0.3f;
+        dig_d_speed = 0.03f;
+        build_Time = 0.9f;
+        build_Speed = 0.03f;
+        buildAmount = 25f;
+        startFill = 3.1f;
+        explodeTimer = 1.10f;
+        explodeRadius = 12f;
+        deathFallLimit = 70;
+        digBelowLimit = 30;
+        digFrontLimit = 40;
+        maxPixels = 80;
+
+    }
 
     void PlaceOnNode()
     {

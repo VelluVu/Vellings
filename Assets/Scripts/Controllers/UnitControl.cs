@@ -5,34 +5,40 @@ using UnityEngine;
 public class UnitControl : MonoBehaviour {
 
     public bool changeSpeed;
-    int count;
+    
     float delta;
     float timer;
-    int maxUnits;
     float timeScale;
     float Interval;
     float momentBeforeSpawning;
     float timeToEnrage;
 
+    int maxUnits;
+    int count;
+
     public GameObject unitPrefab;
     public Animator spawnAnim;
+
     GameObject unitsP;
     List<Unit> units = new List<Unit>();
-
+  
     public static UnitControl singleton;
 
     private void Awake()
     {
+
         singleton = this;
         spawnAnim.SetBool("spawnNow", true);
         
     }
     
-    void Start () {
+    void Start ()
+    {
+
         count = 0;
         Interval = 2f;
         timeToEnrage = 500f;
-        maxUnits = 10;
+        maxUnits = 10;    
         momentBeforeSpawning = 1.5f;
 
         unitsP = new GameObject();
@@ -43,7 +49,8 @@ public class UnitControl : MonoBehaviour {
 
     }
 	
-	void Update () {
+	void Update ()
+    {
         
         delta = Time.deltaTime;
         delta *= timeScale;
@@ -53,11 +60,13 @@ public class UnitControl : MonoBehaviour {
             changeSpeed = false;
             ChangeSpeedOfUnits(timeScale);
         }
+        
         if (units.Count == maxUnits)
         {
             spawnAnim.SetBool("spawnNow", false);
             count = 0;
         }
+        
         if (units.Count < maxUnits)
         {
             

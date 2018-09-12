@@ -47,6 +47,10 @@ public class GameControl : MonoBehaviour
     public Vector3 spawnPosition;
     private Vector3 mousePos;
 
+    public Node enemySpawnNode;
+    public Transform enemySpawnTransform;
+    public Vector3 enemySpawnPosition;
+
     public Color addedTextureColor = Color.green;
     public Color fillColor = Color.magenta;
     public Color shadyCOlor = Color.magenta;
@@ -70,6 +74,8 @@ public class GameControl : MonoBehaviour
         CreateLevel();
         spawnNode = GetNodeFromWorldPos(spawnTransform.position);
         spawnPosition = GetWorldPosFromNode(spawnNode);
+        enemySpawnNode = GetNodeFromWorldPos(enemySpawnTransform.position);
+        enemySpawnPosition = GetWorldPosFromNode(enemySpawnNode);
     }
 
     void CreateLevel()
