@@ -785,6 +785,16 @@ public class Unit : MonoBehaviour {
         stoppedNodes.Clear();
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if(collision.collider.tag == ("endPoint"))
+        {
+            Debug.Log("HITTTTTTT");
+        }
+
+    }
+
     public void ReachEnd()
     {
         UnitControl.FindObjectOfType<UnitControl>().DeleteUnit(this);
