@@ -53,10 +53,10 @@ public class UiControl : MonoBehaviour {
         }
 
         curButton = button;
+
         defaultColor = curButton.buttonImage.color;
         curButton.buttonImage.color = selectTint;
         targetAbility = curButton.ability;
-
     }
 
     public static UiControl singleton;

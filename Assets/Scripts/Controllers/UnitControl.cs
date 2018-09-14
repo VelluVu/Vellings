@@ -117,7 +117,7 @@ public class UnitControl : MonoBehaviour {
     {
         timeScale = 0;
         yield return new WaitForSeconds(momentBeforeSpawning);
-        Debug.Log("YOU WAITED" + momentBeforeSpawning);
+        //Debug.Log("YOU WAITED" + momentBeforeSpawning);
         timeScale = 1f;
     }
     IEnumerator Enrage(float timeToEnrage)
@@ -146,5 +146,5 @@ public class UnitControl : MonoBehaviour {
 }
 public enum Ability
 {
-    walker, bouncer, umbrella, dig_forward, dig_down, explode, builder, filler, die
+    walker, bouncer, umbrella, dig_forward, dig_down, explode, builder, filler, die, minigun
 }

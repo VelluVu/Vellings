@@ -11,10 +11,19 @@ public class EndPoint : MonoBehaviour {
         scoreCount = 0;
     }
 
-    private void Score()
+    public void Score()
     {
-            Debug.Log("Wohoo");
-            Unit.FindObjectOfType<Unit>().ReachEnd();
-            scoreCount++;    
+                
+            scoreCount++;
+            Debug.Log("Wohoo " + scoreCount);
+
+    }
+
+    public void ReduceScore()
+    {
+
+        scoreCount--;
+        Debug.Log("crap" + scoreCount);
+
     }
 }

@@ -14,6 +14,8 @@ public class Unit : MonoBehaviour {
     bool isDigForward;
     bool onGround;
     bool startFilling;
+    bool imDead;
+    public bool isGunning;
 
     float moveSpeed;
     float lerpSpeed;
@@ -32,6 +34,10 @@ public class Unit : MonoBehaviour {
     float explodeTimer;
     float explodeRadius;
     float explode_t;
+    float react;
+    float dieT;
+    float fireTime;
+    public float fireMomentum;
 
     int t_x;
     int t_y;
@@ -43,7 +49,7 @@ public class Unit : MonoBehaviour {
     int digBelowLimit;
     int digFrontLimit;
     int maxPixels;
-
+   
     public int pixelAmount;
     public Ability curAbility;
 
@@ -52,6 +58,7 @@ public class Unit : MonoBehaviour {
     Vector3 targetPos;
     Vector3 startPos;
 
+    ParticleSystem bulletRain;
     GameControl gameControl;
     List<Node> stoppedNodes = new List<Node>();
 
@@ -78,8 +85,12 @@ public class Unit : MonoBehaviour {
         digBelowLimit = 30;
         digFrontLimit = 40;
         maxPixels = 80;
-
+        react = 0.1f;
+        dieT = 0.8f;
+        imDead = false;
+        
     }
+
 
     void PlaceOnNode()
     {
@@ -126,6 +137,9 @@ public class Unit : MonoBehaviour {
                 break;
             case Ability.explode:
                 Explodes(delta);
+                break;
+            case Ability.minigun:
+                Minigun();
                 break;
             case Ability.die:
                 break;
@@ -196,7 +210,7 @@ public class Unit : MonoBehaviour {
                 break;
 
             case Ability.builder:
-                unitAnimator.Play("Build");
+                unitAnimator.Play("Bridge");
                 curAbility = a;
                 build_Count = 0;
                 break;
@@ -205,6 +219,11 @@ public class Unit : MonoBehaviour {
                 curAbility = a;
                 unitAnimator.Play("Explode");
                 explode_t = 0;
+                break;
+
+            case Ability.minigun:
+                curAbility = a;
+                unitAnimator.Play("Miniguns_Minigun");             
                 break;
 
             case Ability.die:
@@ -491,6 +510,14 @@ public class Unit : MonoBehaviour {
         }
 
         return false;
+
+    }
+
+    void Minigun()
+    {
+        fireTime = 5;
+        StartCoroutine(BeforeShoot(fireMomentum));
+        
 
     }
 
@@ -788,15 +815,76 @@ public class Unit : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D collision)
     {
 
-        if(collision.collider.tag == ("endPoint"))
+        if (collision.collider.tag == ("endPoint"))
+        {            
+            unitAnimator.Play("Finish");
+            EndPoint.FindObjectOfType<EndPoint>().Score();
+            ReachEnd();
+        }
+        else if (collision.collider.tag == ("enemy"))
         {
-            Debug.Log("HITTTTTTT");
+            StartCoroutine(Reaction(react));                 
+            EndPoint.FindObjectOfType<EndPoint>().ReduceScore();
         }
 
     }
 
     public void ReachEnd()
     {
+        UnitControl.FindObjectOfType<UnitControl>().DeleteUnit(this);     
+    }
+
+    public float myXPos()
+    {
+        return this.transform.position.x;
+    }
+
+    public float myYPos()
+    {
+        return this.transform.position.y;
+    }
+
+    public Unit Ime()
+    {
+        return this;
+    }
+
+    IEnumerator Reaction(float react)
+    {
+        yield return new WaitForSeconds(react);
+        ChangeAbility(Ability.die);
         UnitControl.FindObjectOfType<UnitControl>().DeleteUnit(this);
+        StartCoroutine(Dying(dieT));
+
+    }
+
+    IEnumerator Dying(float dieT)
+    {
+        yield return new WaitForSecondsRealtime(dieT);
+        ImDead();
+    }
+
+    IEnumerator ShootTime(float fire_t)
+    {
+        unitAnimator.SetTrigger("isFiring");
+        yield return new WaitForSecondsRealtime(fire_t);
+        ChangeAbility(Ability.walker);
+    }
+    IEnumerator BeforeShoot(float fireTimer)
+    {
+        yield return new WaitForSecondsRealtime(fireTimer);
+        StartCoroutine(ShootTime(fireTime));
+        
+    }
+
+    public void ImDead()
+    {
+        this.imDead = true;
+        this.gameObject.SetActive(false);
+    }
+
+    public bool AmDead()
+    {
+        return imDead;
     }
 }

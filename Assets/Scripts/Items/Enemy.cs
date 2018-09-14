@@ -4,142 +4,102 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
-    bool enemyIsMovingLeft;
-    bool enemyIsOnGround;
-    bool enemyInitLerp;
-    bool enemyIsInit;
-    bool enemyMove;
-    bool enemyPreviouslyGrounded;
+    public bool enemyIsMovingLeft;
+    public bool enemyIsOnGround;
+    bool attacked;
 
-    float enemyMoveSpeed;
-    float enemyLerpSpeed;
-    float enemyFallSpeed;
-    float t;
+    public float enemyMoveSpeed;
+    public float distance;
 
-    int t_x;
-    int t_y;
-
-    Node curNode;
-    Node targetNode;
-    
-    Vector3 enemyTargetPos;
-    Vector3 enemyStartPos;
     public SpriteRenderer enemySpriteRend;
     public Animator enemyAnim;
 
-    
-
-    private void start()
-    {
-        
-        PlaceOnNode();
-        enemyLerpSpeed = 0.2f;
-        enemyMoveSpeed = 1f;
-        enemyFallSpeed = 1.5f;
-        
-    }
-
-    void PlaceOnNode()
-    {
-        curNode = GameControl.FindObjectOfType<GameControl>().enemySpawnNode;
-        transform.position = GameControl.FindObjectOfType<GameControl>().enemySpawnPosition;
-    }
+    public Transform groundDetector;
 
     public void Update()
     {
-        
-        EnemyPathFind();
 
+        transform.Translate((Vector2.right * enemyMoveSpeed) * Time.deltaTime);
+        RaycastHit2D groundRay = Physics2D.Raycast(groundDetector.position, Vector2.down, distance);
+        //Debug.Log(groundRay.distance);
 
-        enemySpriteRend.flipX = enemyIsMovingLeft;
-
-    }
-
-    
-
-    public bool EnemyPathFind()
-    {
-        if (curNode == null)
+        if (groundRay.distance <= 0.15)
         {
-            enemyTargetPos = transform.position;
-            enemyTargetPos.y = -50;
-            enemyPreviouslyGrounded = enemyIsOnGround;
-            return false;
-        }
-
-        t_x = curNode.x;
-        t_y = curNode.y;
-
-        bool belowIsAir = EnemyIsAir(t_x, t_y - 1);
-        bool nextIsEmpty = EnemyIsAir(t_x, t_y);
-
-        if (belowIsAir)
-        {
-
-            t_x = curNode.x;
-            t_y -= 1;
-            
-        }
-        else
-        {
-
             enemyIsOnGround = true;
-
-        }
-
-        int s_x = (enemyIsMovingLeft) ? t_x - 1 : t_x + 1;
-        bool stopped = IsStopped(s_x, t_y);
-
-        if (stopped)
+        } else
         {
-            enemyIsMovingLeft = !enemyIsMovingLeft;
-            t_x = (enemyIsMovingLeft) ? curNode.x - 1 : curNode.x + 1;
-            t_y = curNode.y;
+            enemyIsOnGround = false;
         }
-        else if (nextIsEmpty)
 
-        {
-            t_x = (enemyIsMovingLeft) ? t_x - 1 : t_x + 1;
-            t_y = curNode.y;
-        }
-        
-        
-        targetNode = GameControl.FindObjectOfType<GameControl>().GetNode(t_x, t_y);
-        return true;
+        if (groundRay.collider == false || groundRay.distance <= 0.05f)
+        {            
 
-    }    
+            if (enemyIsMovingLeft == false)
+            {
+                transform.eulerAngles = new Vector3(0, -180, 0);
+                enemyIsMovingLeft = true;
+            }
+            else
+            {
+                transform.eulerAngles = new Vector3(0, 0, 0);
+                enemyIsMovingLeft = false;
+            }
+        } 
+    } 
 
     void EnemyDie()
     {
 
+        enemyAnim.SetBool("enemydie", true);
+       
+
+    }
+
+    public void Attack()
+    {        
+
+        enemyAnim.SetBool("enemyattack", true);
+        attacked = true;
+
     }
 
 
-    bool IsStopped(int x, int y)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        Node n = GameControl.FindObjectOfType<GameControl>().GetNode(x, y);
-        if (n == null)
+
+        if (collision.collider.tag == ("unit") && enemyIsOnGround && !attacked)
         {
-            return false;
+            
+            Attack();
+            
         }
-        return n.isStopped;
+        else
+        {
+            enemyAnim.SetBool("enemyattack", false);
+            attacked = false;
+        }
+
+        /*if (collision.collider.tag == ("ground"))
+        {
+            enemyIsOnGround = true;
+            
+        }
+        else
+        {
+            enemyIsOnGround = false;
+                     
+        }
+        */
     }
 
-    bool EnemyIsAir(int x, int y)
+    public float EnemyXPos ()
     {
-        Node n = GameControl.FindObjectOfType<GameControl>().GetNode(x, y);
-
-        
-        if (n == null)
-        {
-            return true;
-        }
-
-        return n.isEmpty;
-
-        /*if (n.isFiller)
-        {
-            isAir = true;
-        }*/      
+        return this.transform.position.x;
     }
+
+    public float EnemyYPos()
+    {
+        return this.transform.position.y;
+    }
+       
 }
