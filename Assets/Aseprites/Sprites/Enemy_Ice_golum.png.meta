@@ -101,12 +101,12 @@ TextureImporter:
       name: Enemy_Ice_golum 0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 3
         y: 96
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -121,12 +121,12 @@ TextureImporter:
       name: Enemy_Ice_golum 1
       rect:
         serializedVersion: 2
-        x: 32
+        x: 35
         y: 96
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -141,12 +141,12 @@ TextureImporter:
       name: Enemy_Ice_golum 2
       rect:
         serializedVersion: 2
-        x: 64
+        x: 66
         y: 96
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -161,12 +161,12 @@ TextureImporter:
       name: Enemy_Ice_golum 3
       rect:
         serializedVersion: 2
-        x: 96
+        x: 98
         y: 96
-        width: 32
-        height: 32
+        width: 26
+        height: 30
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -181,12 +181,12 @@ TextureImporter:
       name: Enemy_Ice_golum 4
       rect:
         serializedVersion: 2
-        x: 128
+        x: 130
         y: 96
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -201,12 +201,12 @@ TextureImporter:
       name: Enemy_Ice_golum 5
       rect:
         serializedVersion: 2
-        x: 160
+        x: 163
         y: 96
-        width: 32
+        width: 26
         height: 32
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -221,12 +221,12 @@ TextureImporter:
       name: Enemy_Ice_golum 6
       rect:
         serializedVersion: 2
-        x: 192
+        x: 195
         y: 96
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -241,12 +241,12 @@ TextureImporter:
       name: Enemy_Ice_golum 7
       rect:
         serializedVersion: 2
-        x: 224
+        x: 227
         y: 96
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -261,12 +261,12 @@ TextureImporter:
       name: Enemy_Ice_golum 8
       rect:
         serializedVersion: 2
-        x: 0
+        x: 3
         y: 64
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -281,12 +281,12 @@ TextureImporter:
       name: Enemy_Ice_golum 9
       rect:
         serializedVersion: 2
-        x: 32
+        x: 35
         y: 64
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -301,12 +301,12 @@ TextureImporter:
       name: Enemy_Ice_golum 10
       rect:
         serializedVersion: 2
-        x: 64
+        x: 67
         y: 64
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -321,12 +321,12 @@ TextureImporter:
       name: Enemy_Ice_golum 11
       rect:
         serializedVersion: 2
-        x: 96
+        x: 99
         y: 64
-        width: 32
-        height: 32
+        width: 26
+        height: 30
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -341,12 +341,12 @@ TextureImporter:
       name: Enemy_Ice_golum 12
       rect:
         serializedVersion: 2
-        x: 128
+        x: 131
         y: 64
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -361,12 +361,12 @@ TextureImporter:
       name: Enemy_Ice_golum 13
       rect:
         serializedVersion: 2
-        x: 160
+        x: 163
         y: 64
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -381,12 +381,12 @@ TextureImporter:
       name: Enemy_Ice_golum 14
       rect:
         serializedVersion: 2
-        x: 192
+        x: 196
         y: 64
-        width: 32
-        height: 32
+        width: 26
+        height: 29
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -401,12 +401,12 @@ TextureImporter:
       name: Enemy_Ice_golum 15
       rect:
         serializedVersion: 2
-        x: 224
+        x: 230
         y: 64
-        width: 32
+        width: 22
         height: 32
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -421,12 +421,12 @@ TextureImporter:
       name: Enemy_Ice_golum 16
       rect:
         serializedVersion: 2
-        x: 0
+        x: 11
         y: 32
-        width: 32
-        height: 32
+        width: 21
+        height: 30
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -441,12 +441,12 @@ TextureImporter:
       name: Enemy_Ice_golum 17
       rect:
         serializedVersion: 2
-        x: 32
+        x: 43
         y: 32
-        width: 32
-        height: 32
+        width: 21
+        height: 30
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -461,12 +461,12 @@ TextureImporter:
       name: Enemy_Ice_golum 18
       rect:
         serializedVersion: 2
-        x: 64
+        x: 67
         y: 32
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -481,12 +481,12 @@ TextureImporter:
       name: Enemy_Ice_golum 19
       rect:
         serializedVersion: 2
-        x: 96
+        x: 97
         y: 32
-        width: 32
+        width: 30
         height: 32
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -503,10 +503,10 @@ TextureImporter:
         serializedVersion: 2
         x: 128
         y: 32
-        width: 32
+        width: 31
         height: 32
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -523,10 +523,10 @@ TextureImporter:
         serializedVersion: 2
         x: 160
         y: 32
-        width: 32
-        height: 32
+        width: 31
+        height: 27
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -543,10 +543,10 @@ TextureImporter:
         serializedVersion: 2
         x: 192
         y: 32
-        width: 32
-        height: 32
+        width: 30
+        height: 19
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -561,12 +561,12 @@ TextureImporter:
       name: Enemy_Ice_golum 23
       rect:
         serializedVersion: 2
-        x: 224
+        x: 226
         y: 32
-        width: 32
-        height: 32
+        width: 24
+        height: 9
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -581,12 +581,12 @@ TextureImporter:
       name: Enemy_Ice_golum 24
       rect:
         serializedVersion: 2
-        x: 0
+        x: 2
         y: 0
-        width: 32
-        height: 32
+        width: 25
+        height: 7
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

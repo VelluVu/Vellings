@@ -151,12 +151,12 @@ TextureImporter:
       name: Velling_unit 0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 5
         y: 224
-        width: 32
-        height: 32
+        width: 19
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -171,12 +171,12 @@ TextureImporter:
       name: Velling_unit 1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 224
-        width: 32
-        height: 32
+        x: 38
+        y: 225
+        width: 15
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -191,12 +191,12 @@ TextureImporter:
       name: Velling_unit 2
       rect:
         serializedVersion: 2
-        x: 64
-        y: 224
-        width: 32
-        height: 32
+        x: 70
+        y: 225
+        width: 16
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -211,12 +211,12 @@ TextureImporter:
       name: Velling_unit 3
       rect:
         serializedVersion: 2
-        x: 96
+        x: 102
         y: 224
-        width: 32
-        height: 32
+        width: 19
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -231,12 +231,12 @@ TextureImporter:
       name: Velling_unit 4
       rect:
         serializedVersion: 2
-        x: 128
+        x: 130
         y: 224
-        width: 32
-        height: 32
+        width: 28
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -251,12 +251,12 @@ TextureImporter:
       name: Velling_unit 5
       rect:
         serializedVersion: 2
-        x: 160
+        x: 166
         y: 224
-        width: 32
-        height: 32
+        width: 21
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -271,12 +271,12 @@ TextureImporter:
       name: Velling_unit 6
       rect:
         serializedVersion: 2
-        x: 192
+        x: 194
         y: 224
-        width: 32
-        height: 32
+        width: 28
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -291,12 +291,12 @@ TextureImporter:
       name: Velling_unit 7
       rect:
         serializedVersion: 2
-        x: 224
+        x: 227
         y: 224
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -311,12 +311,12 @@ TextureImporter:
       name: Velling_unit 8
       rect:
         serializedVersion: 2
-        x: 256
+        x: 260
         y: 224
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -331,12 +331,12 @@ TextureImporter:
       name: Velling_unit 9
       rect:
         serializedVersion: 2
-        x: 288
+        x: 291
         y: 224
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -351,12 +351,12 @@ TextureImporter:
       name: Velling_unit 10
       rect:
         serializedVersion: 2
-        x: 320
+        x: 326
         y: 224
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -371,12 +371,12 @@ TextureImporter:
       name: Velling_unit 11
       rect:
         serializedVersion: 2
-        x: 352
+        x: 358
         y: 224
-        width: 32
+        width: 24
         height: 32
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -391,12 +391,12 @@ TextureImporter:
       name: Velling_unit 12
       rect:
         serializedVersion: 2
-        x: 384
+        x: 390
         y: 224
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -411,12 +411,12 @@ TextureImporter:
       name: Velling_unit 13
       rect:
         serializedVersion: 2
-        x: 416
+        x: 417
         y: 224
-        width: 32
-        height: 32
+        width: 29
+        height: 28
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -431,12 +431,12 @@ TextureImporter:
       name: Velling_unit 14
       rect:
         serializedVersion: 2
-        x: 448
+        x: 454
         y: 224
-        width: 32
-        height: 32
+        width: 20
+        height: 28
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -451,12 +451,12 @@ TextureImporter:
       name: Velling_unit 15
       rect:
         serializedVersion: 2
-        x: 480
+        x: 488
         y: 224
-        width: 32
-        height: 32
+        width: 14
+        height: 28
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -473,10 +473,10 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 192
-        width: 32
-        height: 32
+        width: 23
+        height: 29
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -493,10 +493,10 @@ TextureImporter:
         serializedVersion: 2
         x: 32
         y: 192
-        width: 32
-        height: 32
+        width: 26
+        height: 29
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -513,10 +513,10 @@ TextureImporter:
         serializedVersion: 2
         x: 64
         y: 192
-        width: 32
-        height: 32
+        width: 22
+        height: 29
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -531,12 +531,12 @@ TextureImporter:
       name: Velling_unit 19
       rect:
         serializedVersion: 2
-        x: 96
+        x: 103
         y: 192
-        width: 32
-        height: 32
+        width: 18
+        height: 28
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -553,10 +553,10 @@ TextureImporter:
         serializedVersion: 2
         x: 128
         y: 192
-        width: 32
-        height: 32
+        width: 29
+        height: 28
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -571,12 +571,12 @@ TextureImporter:
       name: Velling_unit 21
       rect:
         serializedVersion: 2
-        x: 160
+        x: 161
         y: 192
-        width: 32
-        height: 32
+        width: 28
+        height: 30
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -591,12 +591,12 @@ TextureImporter:
       name: Velling_unit 22
       rect:
         serializedVersion: 2
-        x: 192
+        x: 193
         y: 192
-        width: 32
-        height: 32
+        width: 28
+        height: 30
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -611,12 +611,12 @@ TextureImporter:
       name: Velling_unit 23
       rect:
         serializedVersion: 2
-        x: 224
+        x: 225
         y: 192
-        width: 32
-        height: 32
+        width: 28
+        height: 30
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -631,12 +631,12 @@ TextureImporter:
       name: Velling_unit 24
       rect:
         serializedVersion: 2
-        x: 256
+        x: 257
         y: 192
-        width: 32
-        height: 32
+        width: 28
+        height: 30
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -651,12 +651,12 @@ TextureImporter:
       name: Velling_unit 25
       rect:
         serializedVersion: 2
-        x: 288
+        x: 294
         y: 192
-        width: 32
-        height: 32
+        width: 18
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -671,12 +671,12 @@ TextureImporter:
       name: Velling_unit 26
       rect:
         serializedVersion: 2
-        x: 320
+        x: 325
         y: 192
-        width: 32
-        height: 32
+        width: 21
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -691,12 +691,12 @@ TextureImporter:
       name: Velling_unit 27
       rect:
         serializedVersion: 2
-        x: 352
+        x: 358
         y: 192
-        width: 32
-        height: 32
+        width: 18
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -711,12 +711,12 @@ TextureImporter:
       name: Velling_unit 28
       rect:
         serializedVersion: 2
-        x: 384
+        x: 389
         y: 192
-        width: 32
-        height: 32
+        width: 21
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -731,12 +731,12 @@ TextureImporter:
       name: Velling_unit 29
       rect:
         serializedVersion: 2
-        x: 416
+        x: 421
         y: 192
-        width: 32
-        height: 32
+        width: 19
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -751,12 +751,12 @@ TextureImporter:
       name: Velling_unit 30
       rect:
         serializedVersion: 2
-        x: 448
+        x: 457
         y: 192
-        width: 32
-        height: 32
+        width: 13
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -771,12 +771,12 @@ TextureImporter:
       name: Velling_unit 31
       rect:
         serializedVersion: 2
-        x: 480
+        x: 489
         y: 192
-        width: 32
-        height: 32
+        width: 16
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -791,12 +791,12 @@ TextureImporter:
       name: Velling_unit 32
       rect:
         serializedVersion: 2
-        x: 0
-        y: 160
-        width: 32
-        height: 32
+        x: 7
+        y: 161
+        width: 16
+        height: 30
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -811,12 +811,12 @@ TextureImporter:
       name: Velling_unit 33
       rect:
         serializedVersion: 2
-        x: 32
-        y: 160
-        width: 32
-        height: 32
+        x: 34
+        y: 161
+        width: 30
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -831,12 +831,12 @@ TextureImporter:
       name: Velling_unit 34
       rect:
         serializedVersion: 2
-        x: 64
-        y: 160
-        width: 32
-        height: 32
+        x: 70
+        y: 164
+        width: 26
+        height: 24
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -851,12 +851,12 @@ TextureImporter:
       name: Velling_unit 35
       rect:
         serializedVersion: 2
-        x: 96
-        y: 160
-        width: 32
-        height: 32
+        x: 105
+        y: 174
+        width: 23
+        height: 18
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -871,12 +871,12 @@ TextureImporter:
       name: Velling_unit 36
       rect:
         serializedVersion: 2
-        x: 128
+        x: 131
         y: 160
-        width: 32
-        height: 32
+        width: 27
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -891,12 +891,12 @@ TextureImporter:
       name: Velling_unit 37
       rect:
         serializedVersion: 2
-        x: 160
+        x: 163
         y: 160
-        width: 32
-        height: 32
+        width: 25
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -911,12 +911,12 @@ TextureImporter:
       name: Velling_unit 38
       rect:
         serializedVersion: 2
-        x: 192
+        x: 195
         y: 160
-        width: 32
-        height: 32
+        width: 25
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -931,12 +931,12 @@ TextureImporter:
       name: Velling_unit 39
       rect:
         serializedVersion: 2
-        x: 224
+        x: 231
         y: 160
-        width: 32
-        height: 32
+        width: 17
+        height: 30
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -951,12 +951,12 @@ TextureImporter:
       name: Velling_unit 40
       rect:
         serializedVersion: 2
-        x: 256
+        x: 263
         y: 160
-        width: 32
-        height: 32
+        width: 16
+        height: 30
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -971,12 +971,12 @@ TextureImporter:
       name: Velling_unit 41
       rect:
         serializedVersion: 2
-        x: 288
+        x: 291
         y: 160
-        width: 32
-        height: 32
+        width: 25
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -991,12 +991,12 @@ TextureImporter:
       name: Velling_unit 42
       rect:
         serializedVersion: 2
-        x: 320
+        x: 323
         y: 160
-        width: 32
-        height: 32
+        width: 25
+        height: 28
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1011,12 +1011,12 @@ TextureImporter:
       name: Velling_unit 43
       rect:
         serializedVersion: 2
-        x: 352
+        x: 355
         y: 160
-        width: 32
-        height: 32
+        width: 25
+        height: 25
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1031,12 +1031,12 @@ TextureImporter:
       name: Velling_unit 44
       rect:
         serializedVersion: 2
-        x: 384
+        x: 387
         y: 160
-        width: 32
-        height: 32
+        width: 23
+        height: 23
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1051,12 +1051,12 @@ TextureImporter:
       name: Velling_unit 45
       rect:
         serializedVersion: 2
-        x: 416
+        x: 418
         y: 160
-        width: 32
-        height: 32
+        width: 25
+        height: 19
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1071,12 +1071,12 @@ TextureImporter:
       name: Velling_unit 46
       rect:
         serializedVersion: 2
-        x: 448
+        x: 449
         y: 160
-        width: 32
-        height: 32
+        width: 29
+        height: 14
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1093,10 +1093,10 @@ TextureImporter:
         serializedVersion: 2
         x: 480
         y: 160
-        width: 32
-        height: 32
+        width: 31
+        height: 11
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1114,9 +1114,9 @@ TextureImporter:
         x: 0
         y: 128
         width: 32
-        height: 32
+        height: 16
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1131,12 +1131,12 @@ TextureImporter:
       name: Velling_unit 49
       rect:
         serializedVersion: 2
-        x: 32
+        x: 41
         y: 128
-        width: 32
-        height: 32
+        width: 12
+        height: 5
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1151,12 +1151,12 @@ TextureImporter:
       name: Velling_unit 50
       rect:
         serializedVersion: 2
-        x: 64
+        x: 69
         y: 128
-        width: 32
-        height: 32
+        width: 19
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1171,12 +1171,12 @@ TextureImporter:
       name: Velling_unit 51
       rect:
         serializedVersion: 2
-        x: 96
+        x: 99
         y: 128
-        width: 32
-        height: 32
+        width: 19
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1193,10 +1193,10 @@ TextureImporter:
         serializedVersion: 2
         x: 128
         y: 128
-        width: 32
-        height: 32
+        width: 22
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1211,12 +1211,12 @@ TextureImporter:
       name: Velling_unit 53
       rect:
         serializedVersion: 2
-        x: 160
+        x: 166
         y: 128
-        width: 32
+        width: 18
         height: 32
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1231,12 +1231,12 @@ TextureImporter:
       name: Velling_unit 54
       rect:
         serializedVersion: 2
-        x: 192
+        x: 198
         y: 128
-        width: 32
-        height: 32
+        width: 21
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1251,12 +1251,12 @@ TextureImporter:
       name: Velling_unit 55
       rect:
         serializedVersion: 2
-        x: 224
+        x: 230
         y: 128
-        width: 32
-        height: 32
+        width: 24
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1271,12 +1271,12 @@ TextureImporter:
       name: Velling_unit 56
       rect:
         serializedVersion: 2
-        x: 256
+        x: 263
         y: 128
-        width: 32
-        height: 32
+        width: 24
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1291,12 +1291,12 @@ TextureImporter:
       name: Velling_unit 57
       rect:
         serializedVersion: 2
-        x: 288
+        x: 293
         y: 128
-        width: 32
-        height: 32
+        width: 21
+        height: 29
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1311,12 +1311,12 @@ TextureImporter:
       name: Velling_unit 58
       rect:
         serializedVersion: 2
-        x: 320
+        x: 326
         y: 128
-        width: 32
-        height: 32
+        width: 20
+        height: 28
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1331,12 +1331,12 @@ TextureImporter:
       name: Velling_unit 59
       rect:
         serializedVersion: 2
-        x: 352
-        y: 128
-        width: 32
-        height: 32
+        x: 357
+        y: 130
+        width: 19
+        height: 28
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1351,12 +1351,12 @@ TextureImporter:
       name: Velling_unit 60
       rect:
         serializedVersion: 2
-        x: 384
+        x: 389
         y: 128
-        width: 32
-        height: 32
+        width: 19
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1373,10 +1373,10 @@ TextureImporter:
         serializedVersion: 2
         x: 416
         y: 128
-        width: 32
-        height: 32
+        width: 26
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1391,12 +1391,12 @@ TextureImporter:
       name: Velling_unit 62
       rect:
         serializedVersion: 2
-        x: 448
+        x: 452
         y: 128
-        width: 32
-        height: 32
+        width: 19
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1411,12 +1411,12 @@ TextureImporter:
       name: Velling_unit 63
       rect:
         serializedVersion: 2
-        x: 480
+        x: 485
         y: 128
-        width: 32
-        height: 32
+        width: 20
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1431,12 +1431,12 @@ TextureImporter:
       name: Velling_unit 64
       rect:
         serializedVersion: 2
-        x: 0
+        x: 6
         y: 96
-        width: 32
-        height: 32
+        width: 22
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1451,12 +1451,12 @@ TextureImporter:
       name: Velling_unit 65
       rect:
         serializedVersion: 2
-        x: 32
+        x: 37
         y: 96
-        width: 32
-        height: 32
+        width: 23
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1471,12 +1471,12 @@ TextureImporter:
       name: Velling_unit 66
       rect:
         serializedVersion: 2
-        x: 64
+        x: 68
         y: 96
-        width: 32
-        height: 32
+        width: 24
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1491,12 +1491,12 @@ TextureImporter:
       name: Velling_unit 67
       rect:
         serializedVersion: 2
-        x: 96
+        x: 103
         y: 96
-        width: 32
-        height: 32
+        width: 20
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1511,12 +1511,12 @@ TextureImporter:
       name: Velling_unit 68
       rect:
         serializedVersion: 2
-        x: 128
+        x: 135
         y: 96
-        width: 32
-        height: 32
+        width: 17
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1531,12 +1531,12 @@ TextureImporter:
       name: Velling_unit 69
       rect:
         serializedVersion: 2
-        x: 160
+        x: 167
         y: 96
-        width: 32
-        height: 32
+        width: 19
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1551,12 +1551,12 @@ TextureImporter:
       name: Velling_unit 70
       rect:
         serializedVersion: 2
-        x: 192
+        x: 199
         y: 96
-        width: 32
-        height: 32
+        width: 22
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1571,12 +1571,12 @@ TextureImporter:
       name: Velling_unit 71
       rect:
         serializedVersion: 2
-        x: 224
+        x: 231
         y: 96
-        width: 32
-        height: 32
+        width: 21
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1591,12 +1591,12 @@ TextureImporter:
       name: Velling_unit 72
       rect:
         serializedVersion: 2
-        x: 256
+        x: 261
         y: 96
-        width: 32
+        width: 18
         height: 32
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1611,12 +1611,12 @@ TextureImporter:
       name: Velling_unit 73
       rect:
         serializedVersion: 2
-        x: 288
+        x: 293
         y: 96
-        width: 32
-        height: 32
+        width: 19
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1631,12 +1631,12 @@ TextureImporter:
       name: Velling_unit 74
       rect:
         serializedVersion: 2
-        x: 320
+        x: 325
         y: 96
-        width: 32
-        height: 32
+        width: 19
+        height: 31
       alignment: 7
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

@@ -1,64 +1,77 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// Controls the game area by creating a pixel perfect level and manipulating pixel colors.
 /// </summary>
 
+#pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
 public class GameControl : MonoBehaviour
+#pragma warning restore CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
 {
     
     public Texture2D levelTexture;
     Texture2D textureInstance;
-
+    Texture2D miniMapInstance;
     public Texture2D GetTextureInstance()
     {
         return textureInstance;
     }
-    public void SetTextureInstance(Texture2D t)
+
+    public void SetTextureInstance(Texture2D texture)
     {
-        textureInstance = t;
+        textureInstance = texture;
     }
 
     public SpriteRenderer levelRenderer;
 
     public float posOffset = 0.01f;
-    int maxX;
-    int maxY;
+    public int maxX;
+    public int maxY;
+    int resetCount;
     bool addTexture;
     public float editRadius = 6;
     private bool overUIElement;
-
-    Node[,] grid;
-    Node currentNode;
-    Node previousNode;
-
-    public Transform fillDebugObj;
+  
     public bool addFill;
     public int pixelAmount;
     public int maxPixels;
     float f_t;
     float p_t;
 
+    Node[,] grid;
+    Node currentNode;
+    Node previousNode;
+
+    public Node GetCurrentNode()
+    {
+        return this.currentNode;
+    }
+
     Unit curUnit;
     public Node spawnNode;
-    public Transform spawnTransform;
+    public Transform fillDebugObj;
     public Vector3 spawnPosition;
     private Vector3 mousePos;
 
     public Node enemySpawnNode;
     public Transform enemySpawnTransform;
-    public Vector3 enemySpawnPosition;
+    public Vector3 enemySpawnPosition;  
 
     public Color addedTextureColor = Color.green;
     public Color fillColor = Color.magenta;
     public Color shadyCOlor = Color.magenta;
+    public Color miniMapColor = Color.yellow;
     
     //classes we need to use in our manager.
-    public UnitControl unitControl;
-    public UiControl uiControl;
-    
+    UnitControl unitControl;
+    UiControl uiControl;
+    LevelEditorControl levelEditor;
+
+    public GameState gameState;
     public static GameControl singleton;
 
     public void Awake()
@@ -69,22 +82,108 @@ public class GameControl : MonoBehaviour
     //Builds the level when the game starts.
     private void Start()
     {
+        resetCount = 0;
         unitControl = UnitControl.singleton;
         uiControl = UiControl.singleton;
-        CreateLevel();
-        spawnNode = GetNodeFromWorldPos(spawnTransform.position);
+        levelEditor = LevelEditorControl.singleton;       
+        levelEditor.Init(this);
+        ChangeState(GameState.mainMenu);
+        levelEditor.FindAllLevels();
+       
+    }
+
+    public void ChangeState(GameState targetState)
+    {
+        gameState = targetState;
+
+        switch (gameState)
+        {
+            case GameState.mainMenu:
+                uiControl.gameUI.SetActive(false);
+                uiControl.levelEditor.SetActive(false);
+                uiControl.miniMap.SetActive(false);
+                uiControl.levelSelection.SetActive(true);
+                uiControl.mainMenu.SetActive(true);
+                uiControl.backButton.SetActive(false);
+                unitControl.SetCount(resetCount);
+                break;
+            case GameState.levelEditor:
+                uiControl.gameUI.SetActive(false);
+                uiControl.levelEditor.SetActive(true);
+                uiControl.miniMap.SetActive(true);
+                uiControl.levelSelection.SetActive(true);
+                uiControl.mainMenu.SetActive(false);
+                uiControl.backButton.SetActive(true);
+                unitControl.SetCount(resetCount);
+                InitLevelEditor();
+                break;
+            case GameState.playGame:
+                uiControl.gameUI.SetActive(true);
+                uiControl.levelEditor.SetActive(false);
+                uiControl.miniMap.SetActive(true);
+                uiControl.levelSelection.SetActive(false);
+                uiControl.mainMenu.SetActive(false);
+                uiControl.backButton.SetActive(true);
+                Init();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void Init()
+    {
+        //levelTexture = levelEditor.LoadLevelTextureAs(levelEditor.levelName);
+        CreateLevel();     
+        spawnNode = GetNodeFromWorldPos(levelEditor.spawnPoint.transform.position);
         spawnPosition = GetWorldPosFromNode(spawnNode);
         enemySpawnNode = GetNodeFromWorldPos(enemySpawnTransform.position);
         enemySpawnPosition = GetWorldPosFromNode(enemySpawnNode);
+        SetExitPositions();
     }
 
-    void CreateLevel()
+    public void InitLevelEditor()
     {
+        textureInstance = new Texture2D(maxX, maxY);
+        textureInstance.filterMode = FilterMode.Point;
+        miniMapInstance = new Texture2D(maxX, maxY);
+        miniMapInstance.filterMode = FilterMode.Point;
+
+        grid = new Node[maxX, maxY];
+        Color c = Color.white;
+        c.a = 0;
+
+        for (int x = 0; x < maxX; x++)
+        {
+            for (int y = 0; y < maxY; y++)
+            {
+                Node n = new Node();
+                n.x = x;
+                n.y = y;                       
+                grid[x, y] = n;
+                textureInstance.SetPixel(x, y, c);
+                miniMapInstance.SetPixel(x, y, c);
+            }
+        }
+        textureInstance.Apply();
+        miniMapInstance.Apply();
+        Rect rect = new Rect(0, 0, maxX, maxY);
+        levelRenderer.sprite = Sprite.Create(textureInstance, rect, Vector2.zero, 100, 0, SpriteMeshType.FullRect);
+        uiControl.miniMapRenderer.sprite = Sprite.Create(miniMapInstance, rect, Vector2.zero, 100, 0, SpriteMeshType.FullRect);
+        uiControl.loading.SetActive(false);
+    }
+
+    public void CreateLevel()
+    {
+        LoadLevel();
         maxX = levelTexture.width;
         maxY = levelTexture.height;
         grid = new Node[maxX, maxY];
         textureInstance = new Texture2D(maxX, maxY);
         textureInstance.filterMode = FilterMode.Point;
+
+        miniMapInstance = new Texture2D(maxX, maxY);
+        miniMapInstance.filterMode = FilterMode.Point;
 
         for (int x = 0; x < maxX; x++)
         {
@@ -100,60 +199,181 @@ public class GameControl : MonoBehaviour
 
                 n.isEmpty = (c.a == 0);
 
+                Color mmC = miniMapColor;
+                if (n.isEmpty)
+                {
+                    mmC.a = 0;
+                }
+                miniMapInstance.SetPixel(x, y, mmC);
                 grid[x, y] = n;
             }
         }
         textureInstance.Apply();
+        miniMapInstance.Apply();
         Rect rect = new Rect(0, 0, maxX, maxY);
         levelRenderer.sprite = Sprite.Create(textureInstance, rect, Vector2.zero, 100, 0, SpriteMeshType.FullRect);
+        uiControl.miniMapRenderer.sprite = Sprite.Create(miniMapInstance, rect, Vector2.zero, 100, 0, SpriteMeshType.FullRect);
+        uiControl.miniMapRenderer.preserveAspect = true;
+    }
+
+    public void LoadLevel()
+    {
+
+        LevelFile save = LevelEditorControl.singleton.LoadFromFile();
+        levelTexture = new Texture2D(0, 0);
+        levelTexture.LoadImage(save.levelTexture);
+
+        CreateVector spawn = save.spawnPosition;
+        if(spawn != null)
+        {
+            Vector3 posit = Vector3.zero;
+            posit.x = spawn.x;
+            posit.y = spawn.y;
+            levelEditor.spawnPoint.transform.position = posit;
+        
+        }
+        CreateVector exit = save.exitPosition;
+        if(exit != null)
+        {
+            Vector3 posexit = Vector3.zero;
+            posexit.x = exit.x;
+            posexit.y = exit.y;
+            levelEditor.exitPoint.transform.position = posexit;
+        }
+    }
+
+    public void LoadTextureFromWWW(string link)
+    {
+        if ( string.IsNullOrEmpty(link))
+        {
+            //TODO: Throw invalid link message
+            return;
+        }
+
+        StartCoroutine(LoadTextureFromWWWTime(link));
+    }
+    
+    IEnumerator LoadTextureFromWWWTime(string url)
+    {
+        uiControl.loading.SetActive(true);
+        WWW www = new WWW(url);
+        yield return www;
+
+        if(www.texture == null)
+        {
+            uiControl.loading.SetActive(false);
+            //TODO: add case where the image failed to download
+        }
+        else
+        {          
+            textureInstance = www.texture;
+            textureInstance.filterMode = FilterMode.Point;
+            maxX = textureInstance.width;
+            maxY = textureInstance.height;
+            Rect rect = new Rect(0, 0, maxX, maxY);
+            levelRenderer.sprite = Sprite.Create(textureInstance, rect, Vector2.zero, 100, 0, SpriteMeshType.FullRect);
+            uiControl.loading.SetActive(false);
+            UpdateMinimap();
+            uiControl.isLoading = false;
+        }
+    }
+
+    void UpdateMinimap()
+    {
+        miniMapInstance = new Texture2D(maxX, maxY);
+        miniMapInstance.filterMode = FilterMode.Point;
+
+        for (int x = 0; x < maxX; x++)
+        {
+            for (int y = 0; y < maxY; y++)
+            {
+                Color c = textureInstance.GetPixel(x, y);
+                Color mmC = miniMapColor;
+                mmC.a = c.a;
+                miniMapInstance.SetPixel(x, y, mmC);
+            }
+        }
+        miniMapInstance.Apply();
+        Rect rect = new Rect(0, 0, maxX, maxY);
+        uiControl.miniMapRenderer.sprite = Sprite.Create(miniMapInstance, rect, Vector2.zero, 100, 0, SpriteMeshType.FullRect);
+        uiControl.miniMapRenderer.preserveAspect = true;
     }
 
     private void Update()
     {
         overUIElement = EventSystem.current.IsPointerOverGameObject();
-        GetMousePosition();
-        CheckForUnit();
-        uiControl.FrameTick();
-        HandleUnit();
-
-        if (addFill)
-        { 
-        //DebugFill();
-        }
-
-        HandleFillNodes();
-        ClearPixelList();
-        BuildNodeList();
         
-        if (addTexture)
+        uiControl.Tick();
+
+        switch (gameState)
         {
-            textureInstance.Apply();
+            case GameState.mainMenu:
+                break;
+            case GameState.levelEditor:
+                //uiControl.mouse.color = levelEditor.targetColor;
+                GetMousePosition();
+                levelEditor.Tick();
+                break;
+            case GameState.playGame:
+                GetMousePosition();
+                InGame();              
+                break;
+            default:
+                break;
         }
 
         //HandleMouseInput();
+        if (addTexture)
+        {
+            textureInstance.Apply();
+            miniMapInstance.Apply();
+        }
     }
 
-    void HandleMouseInput()
+    void InGame()
+    {            
+        unitControl.Tick();
+        CheckForUnit();       
+        HandleUnit();
+
+        /*if (addFill)
+        {
+            DebugFill();
+        }*/
+
+        HandleFillNodes();
+        ClearPixelList();
+        BuildNodeList();    
+    }
+
+    public void HandleMouseInput(Color targetColor, float targetRadus)
     {
         if (currentNode == null)
         {
             return;
         }
+        if (uiControl.isLoading)
+        {
+            return;
+        }
+        if (uiControl.isTextureUI)
+        {
+            return;
+        }
+
         if (Input.GetMouseButton(0))
         {
             if (currentNode != previousNode)
             {
-                previousNode = currentNode;
-
-                Color c = Color.white;
-                c.a = 0;
+                previousNode = currentNode;         
 
                 Vector3 center = GetWorldPosFromNode(currentNode);
-                float radius = editRadius * posOffset;
+                float radius = targetRadus * posOffset;
+                int steps = Mathf.RoundToInt(targetRadus);
 
-                for (int x = -6; x < 6; x++)
+                for (int x = -steps; x < steps; x++)
                 {
-                    for (int y = -6; y < 6; y++)
+                    for (int y = -steps; y < steps; y++)
                     {
                         int t_x = x + currentNode.x;
                         int t_y = y + currentNode.y;
@@ -171,8 +391,11 @@ public class GameControl : MonoBehaviour
                         }
 
                         //n.isEmpty = true;
-                        textureInstance.SetPixel(t_x, t_y, addedTextureColor);
+                        textureInstance.SetPixel(t_x, t_y, targetColor);
 
+                        Color mmC = miniMapColor;
+                        mmC.a = targetColor.a;
+                        miniMapInstance.SetPixel(t_x, t_y, mmC);
                     }
                 }
 
@@ -247,6 +470,7 @@ public class GameControl : MonoBehaviour
             clearNodes[i].isEmpty = true;
             clearNodes[i].isFiller = false;
             textureInstance.SetPixel(clearNodes[i].x, clearNodes[i].y, c);
+            miniMapInstance.SetPixel(clearNodes[i].x, clearNodes[i].y, c);
         }
 
         clearNodes.Clear();
@@ -272,6 +496,7 @@ public class GameControl : MonoBehaviour
         {
             buildNodes[i].isEmpty = false;
             textureInstance.SetPixel(buildNodes[i].x, buildNodes[i].y, addedTextureColor);
+            miniMapInstance.SetPixel(buildNodes[i].x, buildNodes[i].y, miniMapColor);
         }
 
         buildNodes.Clear();
@@ -346,6 +571,7 @@ public class GameControl : MonoBehaviour
                 d.isEmpty = false;
                 d.isFiller = true;
                 textureInstance.SetPixel(d.x, d.y, fillColor);
+                miniMapInstance.SetPixel(d.x, d.y, miniMapColor);
                 f.y = _y;
                 clearNodes.Add(cn);
             }
@@ -363,6 +589,7 @@ public class GameControl : MonoBehaviour
                 if (df.isEmpty)
                 {
                     textureInstance.SetPixel(df.x, df.y, shadyCOlor);
+                    miniMapInstance.SetPixel(df.x, df.y, miniMapColor);
                     f.y = _y;
                     f.x -= 1;
                     df.isEmpty = false;
@@ -377,6 +604,7 @@ public class GameControl : MonoBehaviour
                         bf.isEmpty = false;
                         bf.isFiller = true;
                         textureInstance.SetPixel(bf.x, bf.y, fillColor);
+                        miniMapInstance.SetPixel(bf.x, bf.y, miniMapColor);
                         f.y = _y;
                         f.x += 1;
                         clearNodes.Add(cn);
@@ -447,6 +675,38 @@ public class GameControl : MonoBehaviour
                base.Equals(obj) &&
                overUIElement == control.overUIElement;
     }
+
+    public void BackButton()
+    {
+
+        ChangeState(GameState.mainMenu);
+        unitControl.ClearAll();
+        InitLevelEditor();
+
+    }
+
+    public void SetExitPositions()
+    {
+        Vector3 exitPosition = levelEditor.exitPoint.transform.position;
+        Node eNode = GetNodeFromWorldPos(exitPosition);
+
+        for(int x = -1; x < 1; x++)
+        {
+            for (int y = -5; y < 18; y++)
+            {
+                int t_x = eNode.x + x;
+                int t_y = eNode.y + y;
+
+                Node n = GetNode(t_x, t_y);
+                if(n == null)
+                {
+                    continue;
+                }
+
+                n.isExit = true;
+            }
+        }
+    }
 }
 
 
@@ -457,6 +717,7 @@ public class Node
     public bool isEmpty;
     public bool isStopped;
     public bool isFiller;
+    public bool isExit;
 }
 
 public class FillNode
@@ -467,3 +728,7 @@ public class FillNode
     public bool dropLeft;
 }
 
+public enum GameState
+{
+    mainMenu,levelEditor,playGame
+}

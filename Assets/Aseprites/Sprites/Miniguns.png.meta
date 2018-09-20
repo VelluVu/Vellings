@@ -14,6 +14,7 @@ TextureImporter:
     21300018: Miniguns 9
     21300020: Miniguns 10
     21300022: Miniguns 11
+    21300024: Miniguns_0
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -81,6 +82,28 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 256
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Android
+    maxTextureSize: 256
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -88,13 +111,13 @@ TextureImporter:
       name: Miniguns 0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 5
         y: 96
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        width: 34
+        height: 31
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -108,13 +131,13 @@ TextureImporter:
       name: Miniguns 1
       rect:
         serializedVersion: 2
-        x: 52
+        x: 57
         y: 96
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        width: 34
+        height: 31
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -128,13 +151,13 @@ TextureImporter:
       name: Miniguns 2
       rect:
         serializedVersion: 2
-        x: 104
+        x: 108
         y: 96
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        width: 35
+        height: 31
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -148,13 +171,13 @@ TextureImporter:
       name: Miniguns 3
       rect:
         serializedVersion: 2
-        x: 156
+        x: 160
         y: 96
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        width: 35
+        height: 31
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -168,13 +191,13 @@ TextureImporter:
       name: Miniguns 4
       rect:
         serializedVersion: 2
-        x: 0
+        x: 4
         y: 64
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        width: 35
+        height: 31
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -188,13 +211,13 @@ TextureImporter:
       name: Miniguns 5
       rect:
         serializedVersion: 2
-        x: 52
+        x: 57
         y: 64
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        width: 34
+        height: 31
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -208,12 +231,12 @@ TextureImporter:
       name: Miniguns 6
       rect:
         serializedVersion: 2
-        x: 104
+        x: 107
         y: 64
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
+        width: 38
+        height: 30
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -228,13 +251,13 @@ TextureImporter:
       name: Miniguns 7
       rect:
         serializedVersion: 2
-        x: 156
+        x: 161
         y: 64
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        width: 38
+        height: 30
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -248,13 +271,13 @@ TextureImporter:
       name: Miniguns 8
       rect:
         serializedVersion: 2
-        x: 0
+        x: 3
         y: 32
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        width: 39
+        height: 30
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -268,13 +291,13 @@ TextureImporter:
       name: Miniguns 9
       rect:
         serializedVersion: 2
-        x: 52
+        x: 57
         y: 32
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        width: 40
+        height: 30
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -288,12 +311,12 @@ TextureImporter:
       name: Miniguns 10
       rect:
         serializedVersion: 2
-        x: 104
+        x: 108
         y: 32
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
+        width: 40
+        height: 30
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -308,18 +331,38 @@ TextureImporter:
       name: Miniguns 11
       rect:
         serializedVersion: 2
-        x: 156
+        x: 161
         y: 32
-        width: 52
-        height: 32
-      alignment: 7
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
+        width: 37
+        height: 30
+      alignment: 9
+      pivot: {x: 0.3, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
       spriteID: ba2c55247e0057a4cbe471d42aef8cef
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Miniguns_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 32
+        width: 196
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d56a9f7469eb31446937aa40ec3cd12e
       vertices: []
       indices: 
       edges: []

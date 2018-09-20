@@ -5,6 +5,7 @@ using UnityEngine;
 public class UnitControl : MonoBehaviour {
 
     public bool changeSpeed;
+    public bool unitsSpawned;
     
     float delta;
     float timer;
@@ -17,7 +18,6 @@ public class UnitControl : MonoBehaviour {
     int count;
 
     public GameObject unitPrefab;
-    public Animator spawnAnim;
 
     GameObject unitsP;
     List<Unit> units = new List<Unit>();
@@ -28,13 +28,12 @@ public class UnitControl : MonoBehaviour {
     {
 
         singleton = this;
-        spawnAnim.SetBool("spawnNow", true);
         
     }
     
     void Start ()
     {
-
+        unitsSpawned = false;
         count = 0;
         Interval = 2f;
         timeToEnrage = 500f;
@@ -49,7 +48,7 @@ public class UnitControl : MonoBehaviour {
 
     }
 	
-	void Update ()
+	public void Tick ()
     {
         
         delta = Time.deltaTime;
@@ -62,9 +61,9 @@ public class UnitControl : MonoBehaviour {
         }
         
         if (units.Count == maxUnits)
-        {
-            spawnAnim.SetBool("spawnNow", false);
+        {           
             count = 0;
+            unitsSpawned = true;
         }
         
         if (units.Count < maxUnits)
@@ -82,8 +81,8 @@ public class UnitControl : MonoBehaviour {
         }
 
 		for (int i = 0; i < units.Count; i++)
-        {
-            units[i].FrameTick(delta);
+        {           
+            units[i].Tick(delta);
         }
 	}
 
@@ -113,6 +112,26 @@ public class UnitControl : MonoBehaviour {
 
     }
 
+    public void ClearAll()
+    {
+        for (int i = 0; i < units.Count; i++)
+        {
+            Destroy(units[i].gameObject);
+        }
+        units.Clear();
+    }
+
+    public void SetCount(int count)
+    {
+        this.count = count;
+        UiControl.FindObjectOfType<UiControl>().ResetVellingCounter(this.count);
+    }
+    
+    public int GetCount()
+    {
+        return this.count;
+    }
+
     IEnumerator WaitStart(float momentBeforeSpawning)
     {
         timeScale = 0;
@@ -120,6 +139,7 @@ public class UnitControl : MonoBehaviour {
         //Debug.Log("YOU WAITED" + momentBeforeSpawning);
         timeScale = 1f;
     }
+
     IEnumerator Enrage(float timeToEnrage)
     {
         yield return new WaitForSecondsRealtime(timeToEnrage);

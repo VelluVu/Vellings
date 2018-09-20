@@ -1,8 +1,8 @@
 fileFormatVersion: 2
-guid: 396e2d7bcca7c4847b86d2fd27cedef0
+guid: 5d2bac0c672b19d43b32ded6cfebe8f4
 TextureImporter:
   fileIDToRecycleName:
-    21300000: StartPoint 0
+    21300000: Panel_sprite 0
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -70,47 +70,25 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Standalone
-    maxTextureSize: 128
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
-  - serializedVersion: 2
-    buildTarget: Android
-    maxTextureSize: 128
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: StartPoint 0
+      name: Panel_sprite 0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 0
-        width: 126
-        height: 63
-      alignment: 9
-      pivot: {x: 0.47, y: 0}
+        x: 0
+        y: 39
+        width: 128
+        height: 25
+      alignment: 7
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1ed3932d792a89a4eb58ab99290dd07a
+      spriteID: d2b61d0b88775814ab2d9b647557fa4d
       vertices: []
       indices: 
       edges: []
@@ -118,7 +96,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 2c37cbec1f0e610498b36c57eba41c79
+    spriteID: 3800420db40c7524385ac387e2e82941
     vertices: []
     indices: 
     edges: []

@@ -187,6 +187,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   move: 1
+  hasLeft: 0
   isGunning: 0
   fireMomentum: 0
   pixelAmount: 0

@@ -17,7 +17,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Alerts
   - 
   - 
   - 
@@ -59,4 +59,7 @@ TagManager:
     locked: 0
   - name: EvenMoreForeground
     uniqueID: 2749922595
+    locked: 0
+  - name: Alerts
+    uniqueID: 2139078315
     locked: 0

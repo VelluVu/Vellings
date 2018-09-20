@@ -5,6 +5,7 @@ using UnityEngine;
 public class Unit : MonoBehaviour {
 
     public bool move;
+    public bool hasLeft;
 
     bool isInit;
     bool previouslyGrounded;
@@ -91,15 +92,15 @@ public class Unit : MonoBehaviour {
         
     }
 
-
     void PlaceOnNode()
     {
         curNode = gameControl.spawnNode;
         transform.position = gameControl.spawnPosition;
     }
 	
-	public void FrameTick (float delta) {
-		
+	public void Tick (float delta) {
+
+
         if (!isInit)
         {
             return;
@@ -239,6 +240,12 @@ public class Unit : MonoBehaviour {
 
     }
 
+    IEnumerator Finish()
+    {
+        yield return new WaitForSecondsRealtime(0.45f);
+        ReachEnd();
+    }
+
     bool Pathfind()
     {
         if ( curNode == null)
@@ -248,7 +255,15 @@ public class Unit : MonoBehaviour {
             previouslyGrounded = onGround;
             return false;
         }
-
+        if ( curNode.isExit)
+        {         
+            unitAnimator.Play("Finish");
+            hasLeft = true;
+            EndPoint.FindObjectOfType<EndPoint>().Score();
+            StartCoroutine(Finish());
+            return false;
+                    
+        }
         t_x = curNode.x;
         t_y = curNode.y;
 
@@ -423,7 +438,7 @@ public class Unit : MonoBehaviour {
             t = 0;
 
             bool onPath = Pathfind();
-
+     
             if (onPath)
             {
 
@@ -811,17 +826,18 @@ public class Unit : MonoBehaviour {
         }
         stoppedNodes.Clear();
     }
-
+    
     private void OnCollisionEnter2D(Collision2D collision)
     {
 
-        if (collision.collider.tag == ("endPoint"))
-        {            
+        /*if (collision.collider.tag == ("endPoint"))
+        {        
             unitAnimator.Play("Finish");
             EndPoint.FindObjectOfType<EndPoint>().Score();
             ReachEnd();
-        }
-        else if (collision.collider.tag == ("enemy"))
+        }*/
+        
+        if (collision.collider.tag == ("enemy"))
         {
             StartCoroutine(Reaction(react));                 
             EndPoint.FindObjectOfType<EndPoint>().ReduceScore();
@@ -831,7 +847,10 @@ public class Unit : MonoBehaviour {
 
     public void ReachEnd()
     {
-        UnitControl.FindObjectOfType<UnitControl>().DeleteUnit(this);     
+        
+         this.gameObject.SetActive(false);
+         UnitControl.FindObjectOfType<UnitControl>().DeleteUnit(this);
+        
     }
 
     public float myXPos()
@@ -870,6 +889,7 @@ public class Unit : MonoBehaviour {
         yield return new WaitForSecondsRealtime(fire_t);
         ChangeAbility(Ability.walker);
     }
+
     IEnumerator BeforeShoot(float fireTimer)
     {
         yield return new WaitForSecondsRealtime(fireTimer);
