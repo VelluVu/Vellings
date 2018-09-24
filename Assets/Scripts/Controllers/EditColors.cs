@@ -9,7 +9,7 @@ public class EditColors : MonoBehaviour {
 
     public void Press()
     {
-        LevelEditorControl.singleton.editState = LevelEditorControl.EditState.paint;
-        LevelEditorControl.singleton.targetColor = img.color;
+        LevelEditor.singleton.editState = LevelEditor.EditState.paint;
+        LevelEditor.singleton.targetColor = img.color;
     }
 }

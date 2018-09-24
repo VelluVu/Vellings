@@ -26,10 +26,10 @@ public class EditorButtons : MonoBehaviour {
                    
 
                 }
-                LevelEditorControl.singleton.editState = LevelEditorControl.EditState.remove;
+                LevelEditor.singleton.editState = LevelEditor.EditState.remove;
                 Color c = Color.white;
                 c.a = 0;
-                LevelEditorControl.singleton.targetColor = c;
+                LevelEditor.singleton.targetColor = c;
                 break;
 
             case EditButtonType.save:
@@ -37,7 +37,7 @@ public class EditorButtons : MonoBehaviour {
                 {
                     return;
                 }
-                LevelEditorControl.singleton.SaveLevel();
+                LevelEditor.singleton.SaveLevel();
                 break;
 
             case EditButtonType.load:
@@ -45,7 +45,7 @@ public class EditorButtons : MonoBehaviour {
                 {
                     return;
                 }
-                LevelEditorControl.singleton.LoadLevel();
+                LevelEditor.singleton.LoadLevel();
                 break;
 
             case EditButtonType.clearall:
@@ -62,7 +62,7 @@ public class EditorButtons : MonoBehaviour {
                     return;
                 }
                 GameControl.singleton.ChangeState(GameState.playGame);
-                LevelEditorControl.singleton.editState = LevelEditorControl.EditState.paint;
+                LevelEditor.singleton.editState = LevelEditor.EditState.paint;
                 break;
 
             case EditButtonType.leveleditor:
@@ -71,7 +71,7 @@ public class EditorButtons : MonoBehaviour {
                     return;
                 }
                 GameControl.singleton.ChangeState(GameState.levelEditor);
-                LevelEditorControl.singleton.editState = LevelEditorControl.EditState.paint;
+                LevelEditor.singleton.editState = LevelEditor.EditState.paint;
                 break;
 
             case EditButtonType.mainmenu:
@@ -88,7 +88,7 @@ public class EditorButtons : MonoBehaviour {
                     return;
                 }
                 GameControl.singleton.BackButton();
-                LevelEditorControl.singleton.editState = LevelEditorControl.EditState.paint;
+                LevelEditor.singleton.editState = LevelEditor.EditState.paint;
                 break;
 
             case EditButtonType.closeloadtextureui:
@@ -107,10 +107,10 @@ public class EditorButtons : MonoBehaviour {
                 uiControl.LoadTextureFromWWW();
                 break;
             case EditButtonType.createspawn:
-                LevelEditorControl.singleton.editState = LevelEditorControl.EditState.spawnpoint;
+                LevelEditor.singleton.editState = LevelEditor.EditState.spawnpoint;
                 break;
             case EditButtonType.createexit:
-                LevelEditorControl.singleton.editState = LevelEditorControl.EditState.exitpoint;
+                LevelEditor.singleton.editState = LevelEditor.EditState.exitpoint;
                 break;
             case EditButtonType.exitgame:               
                 Application.Quit();

@@ -8,6 +8,6 @@ public class UILevelButton : MonoBehaviour {
 	
     public void Press()
     {
-        LevelEditorControl.singleton.levelName = targetLevel;
+        LevelEditor.singleton.levelName = targetLevel;
     }
 }

@@ -13,6 +13,6 @@ public class UIInputField : MonoBehaviour {
         {
             return;
         }
-        LevelEditorControl.singleton.levelName = inpField.text;
+        LevelEditor.singleton.levelName = inpField.text;
     }
 }

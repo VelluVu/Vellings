@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour {
 
+    public int enemyHealth;
     public bool enemyIsMovingLeft;
     public bool enemyIsOnGround;
     bool attacked;
+    float edieT;
 
     public float enemyMoveSpeed;
     public float distance;
@@ -15,6 +17,13 @@ public class Enemy : MonoBehaviour {
     public Animator enemyAnim;
 
     public Transform groundDetector;
+
+    private void Start()
+    {
+        enemyMoveSpeed = 0.3f;
+        enemyHealth = 100;
+        edieT = 0.55f;
+    }
 
     public void Update()
     {
@@ -47,12 +56,23 @@ public class Enemy : MonoBehaviour {
         } 
     } 
 
-    void EnemyDie()
+    public void EnemyTakeDamage(int damage)
     {
+        enemyHealth -= damage;
 
+        if (enemyHealth <= damage)
+        {          
+            StartCoroutine(EnemyDeath());
+        }
+
+    }
+    
+        IEnumerator EnemyDeath()
+    {
+        enemyMoveSpeed = 0;
         enemyAnim.SetBool("enemydie", true);
-       
-
+        yield return new WaitForSecondsRealtime(edieT);
+        Destroy(gameObject);
     }
 
     public void Attack()
@@ -78,6 +98,7 @@ public class Enemy : MonoBehaviour {
             enemyAnim.SetBool("enemyattack", false);
             attacked = false;
         }
+        
 
         /*if (collision.collider.tag == ("ground"))
         {

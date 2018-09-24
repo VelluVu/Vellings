@@ -16,7 +16,7 @@ public class Unit : MonoBehaviour {
     bool onGround;
     bool startFilling;
     bool imDead;
-    public bool isGunning;
+    bool hasTurn;
 
     float moveSpeed;
     float lerpSpeed;
@@ -37,8 +37,8 @@ public class Unit : MonoBehaviour {
     float explode_t;
     float react;
     float dieT;
-    float fireTime;
-    public float fireMomentum;
+    float fireTime;  
+    float prepareToFire;
 
     int t_x;
     int t_y;
@@ -59,15 +59,18 @@ public class Unit : MonoBehaviour {
     Vector3 targetPos;
     Vector3 startPos;
 
+    Minigun wep;
     ParticleSystem bulletRain;
     GameControl gameControl;
     List<Node> stoppedNodes = new List<Node>();
 
     public SpriteRenderer ren;
     public Animator unitAnimator;
-    
-	public void Init(GameControl gc)
+    public bool isGunning;
+
+    public void Init(GameControl gc)
     {
+        
         gameControl = gc;
         PlaceOnNode();
         isInit = true;
@@ -89,6 +92,7 @@ public class Unit : MonoBehaviour {
         react = 0.1f;
         dieT = 0.8f;
         imDead = false;
+        isGunning = false;
         
     }
 
@@ -110,8 +114,9 @@ public class Unit : MonoBehaviour {
         {
             return;
         }
+     
 
-        ren.flipX = movingLeft;
+        FlipUnit();
 
         unitAnimator.SetBool("isUmbrella", isUmbrella);
 
@@ -140,7 +145,7 @@ public class Unit : MonoBehaviour {
                 Explodes(delta);
                 break;
             case Ability.minigun:
-                Minigun();
+                UseMinigun();              
                 break;
             case Ability.die:
                 break;
@@ -149,7 +154,15 @@ public class Unit : MonoBehaviour {
         }
 
 	}
-
+    void FlipUnit()
+    {
+        
+        ren.flipX = movingLeft;
+       
+        
+    }
+    
+   
     public bool ChangeAbility(Ability a)
     {
         isUmbrella = false;
@@ -222,10 +235,16 @@ public class Unit : MonoBehaviour {
                 explode_t = 0;
                 break;
 
-            case Ability.minigun:
-                curAbility = a;
-                unitAnimator.Play("Miniguns_Minigun");             
-                break;
+            case Ability.minigun:              
+                if (previouslyGrounded)
+                {
+                    curAbility = a;
+                    unitAnimator.Play("Miniguns_Minigun");
+                    return true;
+                } else
+                {
+                    return false;
+                }
 
             case Ability.die:
                 curAbility = a;
@@ -430,6 +449,8 @@ public class Unit : MonoBehaviour {
 
     void Walker(float delta)
     {
+        isGunning = false;
+
         if (!initLerp)
         {
             initLerp = true;
@@ -528,12 +549,18 @@ public class Unit : MonoBehaviour {
 
     }
 
-    void Minigun()
+    void UseMinigun()
     {
-        fireTime = 5;
-        StartCoroutine(BeforeShoot(fireMomentum));
+        if (wep == null)
+        {
+            wep = this.GetComponent<Minigun>();
+        }
         
-
+        isGunning = false;
+        fireTime = 5f;
+        prepareToFire = 1f;      
+        StartCoroutine(BeforeShoot(prepareToFire, fireTime));
+        
     }
 
     void Builder(float delta)
@@ -863,11 +890,6 @@ public class Unit : MonoBehaviour {
         return this.transform.position.y;
     }
 
-    public Unit Ime()
-    {
-        return this;
-    }
-
     IEnumerator Reaction(float react)
     {
         yield return new WaitForSeconds(react);
@@ -883,19 +905,27 @@ public class Unit : MonoBehaviour {
         ImDead();
     }
 
-    IEnumerator ShootTime(float fire_t)
-    {
+    IEnumerator ShootTime(float firetime)
+    {   
+        
         unitAnimator.SetTrigger("isFiring");
-        yield return new WaitForSecondsRealtime(fire_t);
+        isGunning = true;
+        if (isGunning)
+        {
+            wep.Fire();
+        }
+        yield return new WaitForSecondsRealtime(fireTime);
         ChangeAbility(Ability.walker);
+
     }
 
-    IEnumerator BeforeShoot(float fireTimer)
-    {
-        yield return new WaitForSecondsRealtime(fireTimer);
-        StartCoroutine(ShootTime(fireTime));
+    IEnumerator BeforeShoot(float prepToFire, float firetime)
+    {    
         
-    }
+        yield return new WaitForSecondsRealtime(prepToFire);
+        StartCoroutine(ShootTime(firetime));
+        
+    }  
 
     public void ImDead()
     {

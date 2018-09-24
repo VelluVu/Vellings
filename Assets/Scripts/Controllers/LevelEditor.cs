@@ -1,16 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
 
-public class LevelEditorControl : MonoBehaviour {
+public class LevelEditor : MonoBehaviour {
 
-    public string levelName;    
-    public int maxX;
-    public int maxY;
+    public string levelName;
     public float paintSize;
 
     public EditState editState;
@@ -18,13 +15,16 @@ public class LevelEditorControl : MonoBehaviour {
     public GameObject levelTemplate;
     public GameObject spawnPoint;
     public GameObject exitPoint;
+    
     public List<string> availableLevels = new List<string>();
     List<GameObject> levelObjs = new List<GameObject>();
     GameControl gc;
 
-    
+    List<LevelFile> levelFiles = new List<LevelFile>();
+    Dictionary<string, int> level_dict = new Dictionary<string, int>();
 
-    public static LevelEditorControl singleton;
+
+    public static LevelEditor singleton;
 
     private void Awake()
     {
@@ -36,12 +36,31 @@ public class LevelEditorControl : MonoBehaviour {
         paint,remove,spawnpoint,exitpoint
     }
 
+    public Texture2D defaultLevel;
+
     public void Init(GameControl g)
     {
-        gc = g;
+        gc = g;     
 
-       
+        DefaultLevel();
+
     }  
+
+    public void DefaultLevel()
+    {
+
+        LevelFile defaultLvl = new LevelFile();
+        defaultLvl.levelName = "default";
+        defaultLvl.levelTexture = defaultLevel.EncodeToPNG();
+
+        defaultLvl.spawnPosition = new CreateVector();
+        defaultLvl.spawnPosition.x = 1f;
+        defaultLvl.spawnPosition.y = 1f;
+
+        defaultLvl.exitPosition = new CreateVector();
+        defaultLvl.exitPosition.x = 9.465f;
+        defaultLvl.exitPosition.y = 0.6f;
+    }
 
     public void AddAllLevels()
     {
@@ -79,6 +98,10 @@ public class LevelEditorControl : MonoBehaviour {
 
     void Paint()
     {
+        if (gc.overUIElement)
+        {
+            return;
+        }
         switch (editState)
         {
             case EditState.paint:
@@ -100,6 +123,11 @@ public class LevelEditorControl : MonoBehaviour {
 
     void PaintSpawnExitPoint(bool isSpawn)
     {
+        if (gc.overUIElement)
+        {
+            return;
+        }
+
         if (Input.GetMouseButtonUp(0))
         {
 
@@ -122,26 +150,47 @@ public class LevelEditorControl : MonoBehaviour {
         }
     }
 
-    public void SaveLevel()
-    {
-
-        //SaveTexture(levelName, gc.GetTextureInstance());
-        SaveToFile();
-        FindAllLevels();
-    }
+    
 
     void SaveToFile()
     {
+
         LevelFile save = new LevelFile();
-        save.levelTexture = GameControl.singleton.GetTextureInstance().EncodeToPNG();
+        save.levelName = levelName;
+        save.levelTexture = gc.GetTextureInstance().EncodeToPNG();
         save.spawnPosition = new CreateVector();
         save.spawnPosition.x = spawnPoint.transform.position.x;
         save.spawnPosition.y = spawnPoint.transform.position.y;
-
+     
         save.exitPosition = new CreateVector();
         save.exitPosition.x = exitPoint.transform.position.x;
         save.exitPosition.y = exitPoint.transform.position.y;
         
+
+        if(gc.isAndroid)
+        {
+            int targetIndex = levelFiles.Count;
+            LevelFile d = IsDuplicate(save);
+
+            if(d != null)
+            {
+             
+                targetIndex = StringToInt(level_dict, save.levelName);
+                levelFiles[targetIndex] = save;
+
+            }
+            else
+            {
+
+                levelFiles.Add(save);
+                level_dict.Add(save.levelName, targetIndex);
+
+            }
+
+            return;
+        }
+
+
         string saveLocation = SaveLocation();
         saveLocation += levelName;
 
@@ -161,10 +210,38 @@ public class LevelEditorControl : MonoBehaviour {
         return saveLocation;
     }
 
+    LevelFile IsDuplicate(LevelFile s)
+    {
+        for (int i = 0; i < levelFiles.Count; i++)
+        {
+            if (string.Equals(levelFiles[i].levelName, s.levelName))
+            {
+                return levelFiles[i];
+            }
+        }
+
+        return null;
+    }
+
+    int StringToInt(Dictionary<string,int> d, string key)
+    {
+        int index = -1;
+        d.TryGetValue(key, out index);
+        return index;
+    }
+
     public LevelFile LoadFromFile()
     {
 
         LevelFile saveFile = null;
+
+        if(gc.isAndroid)
+        {
+            int index = StringToInt(level_dict, levelName);
+            saveFile = levelFiles[index];
+            return saveFile;
+        }
+
         string targetName = SaveLocation();
         targetName += levelName;
         
@@ -195,6 +272,11 @@ public class LevelEditorControl : MonoBehaviour {
         t.LoadImage(bytes);
         return t;
     }
+    public void SaveLevel()
+    {
+        SaveToFile();
+        FindAllLevels();
+    }
 
     public void FindAllLevels()
     {
@@ -205,6 +287,18 @@ public class LevelEditorControl : MonoBehaviour {
 
     public void LoadAllLevels()
     {
+        
+        if (gc.isAndroid)
+        {
+
+            for (int i = 0; i < levelFiles.Count; i++)
+            {
+                availableLevels.Add(levelFiles[i].levelName);
+            }
+
+            return;
+        }
+        
         DirectoryInfo dirInfo = new DirectoryInfo(SaveLocation());
         FileInfo[] fileInfo = dirInfo.GetFiles();
 
@@ -223,34 +317,14 @@ public class LevelEditorControl : MonoBehaviour {
     {
         gc.CreateLevel();
         
-        //LoadLevelTexture(levelName);
-    }
- 
-    /*public void SaveTexture(string fileName, Texture2D texture)
-    {
-        string path = Application.dataPath + "/Levels/" + fileName + ".png";
-
-        File.WriteAllBytes(path, texture.EncodeToPNG());
-    }
-    */
-
-    /*public void LoadLevelTexture(string fileName)
-    {
-
-        string path = Application.dataPath + "/Levels/" + fileName + ".png";
-
-        byte[] bytes;
-        bytes = File.ReadAllBytes(path);
-        GameControl.singleton.GetTextureInstance().LoadImage(bytes);
-
-    }
-    */
+    }  
 
 }
 
 [System.Serializable]
 public class LevelFile
 {
+    public string levelName;
     public byte[] levelTexture;
     public CreateVector spawnPosition;
     public CreateVector exitPosition;

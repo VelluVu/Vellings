@@ -28,13 +28,13 @@ public class GameControl : MonoBehaviour
 
     public SpriteRenderer levelRenderer;
 
-    public float posOffset = 0.01f;
+    public float posOffset;
     public int maxX;
     public int maxY;
     int resetCount;
     bool addTexture;
-    public float editRadius = 6;
-    private bool overUIElement;
+    public float editRadius = 6f;
+    public bool overUIElement;
   
     public bool addFill;
     public int pixelAmount;
@@ -59,33 +59,39 @@ public class GameControl : MonoBehaviour
 
     public Node enemySpawnNode;
     public Transform enemySpawnTransform;
-    public Vector3 enemySpawnPosition;  
+    public Vector3 enemySpawnPosition;
+    
+    public bool isAndroid;
 
     public Color addedTextureColor = Color.green;
     public Color fillColor = Color.magenta;
     public Color shadyCOlor = Color.magenta;
     public Color miniMapColor = Color.yellow;
     
-    //classes we need to use in our manager.
     UnitControl unitControl;
     UiControl uiControl;
-    LevelEditorControl levelEditor;
+    LevelEditor levelEditor;
 
     public GameState gameState;
     public static GameControl singleton;
 
     public void Awake()
-    {
+    {            
         singleton = this;
+      
+        /*if (Application.platform == RuntimePlatform.Android)
+        {*/
+            isAndroid = true;
+        //}
     }
 
-    //Builds the level when the game starts.
     private void Start()
     {
+        
         resetCount = 0;
         unitControl = UnitControl.singleton;
         uiControl = UiControl.singleton;
-        levelEditor = LevelEditorControl.singleton;       
+        levelEditor = LevelEditor.singleton;       
         levelEditor.Init(this);
         ChangeState(GameState.mainMenu);
         levelEditor.FindAllLevels();
@@ -133,7 +139,7 @@ public class GameControl : MonoBehaviour
 
     public void Init()
     {
-        //levelTexture = levelEditor.LoadLevelTextureAs(levelEditor.levelName);
+        
         CreateLevel();     
         spawnNode = GetNodeFromWorldPos(levelEditor.spawnPoint.transform.position);
         spawnPosition = GetWorldPosFromNode(spawnNode);
@@ -219,11 +225,11 @@ public class GameControl : MonoBehaviour
     public void LoadLevel()
     {
 
-        LevelFile save = LevelEditorControl.singleton.LoadFromFile();
-        levelTexture = new Texture2D(0, 0);
+        LevelFile save = LevelEditor.singleton.LoadFromFile();
+        levelTexture = new Texture2D(0, 0);       
         levelTexture.LoadImage(save.levelTexture);
-
         CreateVector spawn = save.spawnPosition;
+
         if(spawn != null)
         {
             Vector3 posit = Vector3.zero;
@@ -309,8 +315,7 @@ public class GameControl : MonoBehaviour
         {
             case GameState.mainMenu:
                 break;
-            case GameState.levelEditor:
-                //uiControl.mouse.color = levelEditor.targetColor;
+            case GameState.levelEditor:             
                 GetMousePosition();
                 levelEditor.Tick();
                 break;
@@ -321,8 +326,7 @@ public class GameControl : MonoBehaviour
             default:
                 break;
         }
-
-        //HandleMouseInput();
+   
         if (addTexture)
         {
             textureInstance.Apply();
@@ -335,15 +339,15 @@ public class GameControl : MonoBehaviour
         unitControl.Tick();
         CheckForUnit();       
         HandleUnit();
+        HandleFillNodes();
+        ClearPixelList();
+        BuildNodeList();
 
         /*if (addFill)
         {
             DebugFill();
         }*/
 
-        HandleFillNodes();
-        ClearPixelList();
-        BuildNodeList();    
     }
 
     public void HandleMouseInput(Color targetColor, float targetRadus)
@@ -692,12 +696,13 @@ public class GameControl : MonoBehaviour
 
         for(int x = -1; x < 1; x++)
         {
-            for (int y = -5; y < 18; y++)
+            for (int y = -1; y < 4; y++)
             {
                 int t_x = eNode.x + x;
                 int t_y = eNode.y + y;
 
                 Node n = GetNode(t_x, t_y);
+
                 if(n == null)
                 {
                     continue;
