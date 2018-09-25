@@ -52,22 +52,22 @@ public class GameControl : MonoBehaviour
     }
 
     Unit curUnit;
-    public Node spawnNode;
-    public Transform fillDebugObj;
+
+    public Node enemySpawnNod;
+    public Vector3 enemySpawnPos;
+
+    public Node spawnNode; 
     public Vector3 spawnPosition;
     private Vector3 mousePos;
-
-    public Node enemySpawnNode;
-    public Transform enemySpawnTransform;
-    public Vector3 enemySpawnPosition;
-    
+    public GameObject enemy;
+    public Transform fillDebugObj;
     public bool isAndroid;
 
     public Color addedTextureColor = Color.green;
     public Color fillColor = Color.magenta;
     public Color shadyCOlor = Color.magenta;
     public Color miniMapColor = Color.yellow;
-    
+
     UnitControl unitControl;
     UiControl uiControl;
     LevelEditor levelEditor;
@@ -87,9 +87,10 @@ public class GameControl : MonoBehaviour
 
     private void Start()
     {
-        
+        enemy.SetActive(false);
         resetCount = 0;
         unitControl = UnitControl.singleton;
+        //enemyControl = EnemyControl.singleton;
         uiControl = UiControl.singleton;
         levelEditor = LevelEditor.singleton;       
         levelEditor.Init(this);
@@ -111,7 +112,10 @@ public class GameControl : MonoBehaviour
                 uiControl.levelSelection.SetActive(true);
                 uiControl.mainMenu.SetActive(true);
                 uiControl.backButton.SetActive(false);
-                unitControl.SetCount(resetCount);
+                uiControl.winPopUp.SetActive(false);
+                unitControl.ResetCount();
+                unitControl.ResetEscapeCount();
+               
                 break;
             case GameState.levelEditor:
                 uiControl.gameUI.SetActive(false);
@@ -120,16 +124,20 @@ public class GameControl : MonoBehaviour
                 uiControl.levelSelection.SetActive(true);
                 uiControl.mainMenu.SetActive(false);
                 uiControl.backButton.SetActive(true);
-                unitControl.SetCount(resetCount);
+                unitControl.ResetCount();
                 InitLevelEditor();
                 break;
             case GameState.playGame:
+                unitControl.SetMaxUnits(10);
                 uiControl.gameUI.SetActive(true);
                 uiControl.levelEditor.SetActive(false);
                 uiControl.miniMap.SetActive(true);
                 uiControl.levelSelection.SetActive(false);
                 uiControl.mainMenu.SetActive(false);
                 uiControl.backButton.SetActive(true);
+                //enemy.SetActive(true);
+                //FindObjectOfType<Enemy>().EnemyPlaceOnNode();
+                
                 Init();
                 break;
             default:
@@ -138,13 +146,10 @@ public class GameControl : MonoBehaviour
     }
 
     public void Init()
-    {
-        
+    {      
         CreateLevel();     
         spawnNode = GetNodeFromWorldPos(levelEditor.spawnPoint.transform.position);
-        spawnPosition = GetWorldPosFromNode(spawnNode);
-        enemySpawnNode = GetNodeFromWorldPos(enemySpawnTransform.position);
-        enemySpawnPosition = GetWorldPosFromNode(enemySpawnNode);
+        spawnPosition = GetWorldPosFromNode(spawnNode);     
         SetExitPositions();
     }
 
@@ -226,9 +231,10 @@ public class GameControl : MonoBehaviour
     {
 
         LevelFile save = LevelEditor.singleton.LoadFromFile();
-        levelTexture = new Texture2D(0, 0);       
+        levelTexture = new Texture2D(0, 0);              
         levelTexture.LoadImage(save.levelTexture);
-        CreateVector spawn = save.spawnPosition;
+
+        SaveVector spawn = save.spawnPosition;
 
         if(spawn != null)
         {
@@ -236,9 +242,10 @@ public class GameControl : MonoBehaviour
             posit.x = spawn.x;
             posit.y = spawn.y;
             levelEditor.spawnPoint.transform.position = posit;
-        
         }
-        CreateVector exit = save.exitPosition;
+
+        SaveVector exit = save.exitPosition;
+
         if(exit != null)
         {
             Vector3 posexit = Vector3.zero;
@@ -246,6 +253,16 @@ public class GameControl : MonoBehaviour
             posexit.y = exit.y;
             levelEditor.exitPoint.transform.position = posexit;
         }
+
+        /*SaveVector eSpawn = save.enemySpawnPosition;
+
+        if(eSpawn != null)
+        {
+            Vector3 posESpawn = Vector3.zero;
+            posESpawn.x = eSpawn.x;
+            posESpawn.y = eSpawn.y;
+            levelEditor.enemySpawnPoint.transform.position = posESpawn;
+        }*/
     }
 
     public void LoadTextureFromWWW(string link)
@@ -334,12 +351,24 @@ public class GameControl : MonoBehaviour
         }
     }
 
+    public bool isSpeed;
+
     void InGame()
-    {            
-        unitControl.Tick();
+    {
+        float delta = Time.deltaTime;
+
+        float timeScale = 1;
+        if (isSpeed)
+        {
+            timeScale = 2;
+        }
+        delta *= timeScale;
+
+        //enemyControl.Tick();
+        unitControl.Tick(delta, timeScale);
         CheckForUnit();       
         HandleUnit();
-        HandleFillNodes();
+        HandleFillNodes(delta);
         ClearPixelList();
         BuildNodeList();
 
@@ -508,6 +537,7 @@ public class GameControl : MonoBehaviour
 
     }
 
+    //Only used to test fill pixels
     void DebugFill()
     {
         if(pixelAmount > maxPixels)
@@ -535,9 +565,9 @@ public class GameControl : MonoBehaviour
         addTexture = true;
     }
 
-    void HandleFillNodes()
+    void HandleFillNodes(float delta)
     {
-        f_t += Time.deltaTime;
+        f_t += delta;
 
         if (f_t > 0.05f)
         {
@@ -685,6 +715,7 @@ public class GameControl : MonoBehaviour
 
         ChangeState(GameState.mainMenu);
         unitControl.ClearAll();
+        //enemyControl.ClearAllEnemy();
         InitLevelEditor();
 
     }

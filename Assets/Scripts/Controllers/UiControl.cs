@@ -14,6 +14,7 @@ public class UiControl : MonoBehaviour {
     public Sprite cTarget2;
     public Sprite cSelection;
     public Text vellingCount;
+    public Text vellingEscape;
 
     public bool isLoading;
     public bool isTextureUI;
@@ -35,6 +36,8 @@ public class UiControl : MonoBehaviour {
     public GameObject backButton;
     public GameObject loading;
     public GameObject loadTextureUI;
+    public GameObject winPopUp;
+    public Text wintext;
     public InputField inputLinkField;
     
     void Start()
@@ -43,6 +46,7 @@ public class UiControl : MonoBehaviour {
         canvas.SetActive(true);
         loading.SetActive(false);
         loadTextureUI.SetActive(false);
+        winPopUp.SetActive(false);
     }
 
     //Replaces Update, this is updated on GameControl class.
@@ -79,6 +83,15 @@ public class UiControl : MonoBehaviour {
 
     public void PressAbilityButton(ButtonControl button)
     {
+
+        if(button.ability == Ability.speedy)
+        {
+
+            GameControl.singleton.isSpeed = !GameControl.singleton.isSpeed;
+
+            return;
+        }
+
         if (curButton)
         {
             curButton.buttonImage.color = defaultColor;
@@ -93,15 +106,14 @@ public class UiControl : MonoBehaviour {
 
     public static UiControl singleton;
 
-    public void IncrementVellingCounter(int count)
-    {
-        vellingCount.text = "" + count;
-
-    }
-
     public void ResetVellingCounter(int count)
     {
         vellingCount.text = "" + count;
+    }
+
+    public void ResetVellingEscape(int count)
+    {
+        vellingEscape.text = "" + count;
     }
 
     void Awake()

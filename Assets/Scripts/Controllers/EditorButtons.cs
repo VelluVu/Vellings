@@ -112,6 +112,9 @@ public class EditorButtons : MonoBehaviour {
             case EditButtonType.createexit:
                 LevelEditor.singleton.editState = LevelEditor.EditState.exitpoint;
                 break;
+            /*case EditButtonType.createenemyspawn:
+                LevelEditor.singleton.editState = LevelEditor.EditState.enemyspawnpoint;
+                break;*/
             case EditButtonType.exitgame:               
                 Application.Quit();
                 break;
@@ -123,5 +126,5 @@ public class EditorButtons : MonoBehaviour {
 }
 public enum EditButtonType
 {
-    erase, save, load, clearall, startgame, leveleditor, mainmenu, exitgame, backbutton, closeloadtextureui, openloadtextureui,loadtexturefromwww,createspawn,createexit
+    erase, save, load, clearall, startgame, leveleditor, mainmenu, exitgame, backbutton, closeloadtextureui, openloadtextureui, loadtexturefromwww, createspawn, createexit, //createenemyspawn
 }

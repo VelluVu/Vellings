@@ -6,16 +6,16 @@ public class UnitControl : MonoBehaviour {
 
     public bool changeSpeed;
     public bool unitsSpawned;
-    
+
     float delta;
     float timer;
-    float timeScale;
-    float Interval;
+    float interval;
     float momentBeforeSpawning;
     float timeToEnrage;
 
+    int escapeCount;
     int maxUnits;
-    int count;
+    int outCount;
 
     public GameObject unitPrefab;
 
@@ -34,8 +34,9 @@ public class UnitControl : MonoBehaviour {
     void Start ()
     {
         unitsSpawned = false;
-        count = 0;
-        Interval = 2f;
+        outCount = 0;
+        escapeCount = 0;
+        interval = 2f;
         timeToEnrage = 500f;
         maxUnits = 10;    
         momentBeforeSpawning = 1.5f;
@@ -43,40 +44,51 @@ public class UnitControl : MonoBehaviour {
         unitsP = new GameObject();
         unitsP.name = "units parent";
 
-        StartCoroutine(WaitStart(momentBeforeSpawning));
-        StartCoroutine(Enrage(timeToEnrage));
+        
 
     }
 	
-	public void Tick ()
+	public void Tick (float d, float timeScale)
     {
         
-        delta = Time.deltaTime;
-        delta *= timeScale;
+        StartCoroutine(WaitStart(momentBeforeSpawning, timeScale));
+        StartCoroutine(Enrage(timeToEnrage, timeScale));
+
+        delta = d;
+
 
         if(changeSpeed)
         {
             changeSpeed = false;
             ChangeSpeedOfUnits(timeScale);
         }
-        
+
         if (units.Count == maxUnits)
-        {           
-            count = 0;
+        {
             unitsSpawned = true;
+        }
+
+        if (outCount <= maxUnits/2 && escapeCount >= maxUnits/2)
+        {
+
+            UiControl.singleton.winPopUp.SetActive(true);
+
+            if (escapeCount == maxUnits)
+            {
+                UiControl.singleton.wintext.text = "PERFECT !";
+                //perfect
+            }
         }
         
         if (units.Count < maxUnits)
         {
-            
-            
+                   
             timer -= delta;
             if (timer < 0)
             {              
-                timer = Interval;
+                timer = interval;
                 SpawnUnit();
-                count++;
-                UiControl.FindObjectOfType<UiControl>().IncrementVellingCounter(count);
+                SetCount(1);
             }
         }
 
@@ -100,7 +112,6 @@ public class UnitControl : MonoBehaviour {
     public void DeleteUnit(Unit curUnit)
     {
         units.Remove(curUnit);
-        maxUnits--;
     }
     
     void ChangeSpeedOfUnits(float t)
@@ -123,16 +134,44 @@ public class UnitControl : MonoBehaviour {
 
     public void SetCount(int count)
     {
-        this.count = count;
-        UiControl.FindObjectOfType<UiControl>().ResetVellingCounter(this.count);
-    }
-    
-    public int GetCount()
-    {
-        return this.count;
+        this.outCount += count;
+       
+        FindObjectOfType<UiControl>().ResetVellingCounter(outCount);
     }
 
-    IEnumerator WaitStart(float momentBeforeSpawning)
+    public void ResetCount()
+    {
+        this.outCount = 0;
+
+        FindObjectOfType<UiControl>().ResetVellingCounter(outCount);
+    }
+
+    public int GetCount()
+    {
+        return this.outCount;
+    }
+
+    public void SetMaxUnits(int units)
+    {
+        this.maxUnits = units;
+    }
+
+    public void SetEscapeCount(int ec)
+    {
+        this.escapeCount += ec;
+        this.outCount -= 1;
+    
+        FindObjectOfType<UiControl>().ResetVellingEscape(escapeCount);
+        FindObjectOfType<UiControl>().ResetVellingCounter(outCount);
+    }
+
+    public void ResetEscapeCount()
+    {
+        this.escapeCount = 0;
+        FindObjectOfType<UiControl>().ResetVellingEscape(escapeCount);
+    }
+    
+    IEnumerator WaitStart(float momentBeforeSpawning,float timeScale)
     {
         timeScale = 0;
         yield return new WaitForSeconds(momentBeforeSpawning);
@@ -140,7 +179,7 @@ public class UnitControl : MonoBehaviour {
         timeScale = 1f;
     }
 
-    IEnumerator Enrage(float timeToEnrage)
+    IEnumerator Enrage(float timeToEnrage, float timeScale)
     {
         yield return new WaitForSecondsRealtime(timeToEnrage);
         Debug.Log("Enrage");
@@ -166,5 +205,5 @@ public class UnitControl : MonoBehaviour {
 }
 public enum Ability
 {
-    walker, bouncer, umbrella, dig_forward, dig_down, explode, builder, filler, die, minigun
+    walker, bouncer, umbrella, dig_forward, dig_down, explode, builder, filler, die, minigun, speedy
 }

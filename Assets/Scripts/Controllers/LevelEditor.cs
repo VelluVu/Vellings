@@ -15,11 +15,13 @@ public class LevelEditor : MonoBehaviour {
     public GameObject levelTemplate;
     public GameObject spawnPoint;
     public GameObject exitPoint;
-    
-    public List<string> availableLevels = new List<string>();
-    List<GameObject> levelObjs = new List<GameObject>();
+
+    //public GameObject enemySpawnPoint;
     GameControl gc;
 
+    public List<string> availableLevels = new List<string>();
+    List<GameObject> levelObjs = new List<GameObject>();
+    
     List<LevelFile> levelFiles = new List<LevelFile>();
     Dictionary<string, int> level_dict = new Dictionary<string, int>();
 
@@ -28,38 +30,41 @@ public class LevelEditor : MonoBehaviour {
 
     private void Awake()
     {
-        singleton = this;
+        singleton = this;      
     }
 
     public enum EditState
     {
-        paint,remove,spawnpoint,exitpoint
+        paint,remove,spawnpoint,exitpoint//enemyspawnpoint
     }
 
     public Texture2D defaultLevel;
 
     public void Init(GameControl g)
     {
-        gc = g;     
+
+        gc = g;
 
         DefaultLevel();
-
+       
     }  
 
-    public void DefaultLevel()
+    void DefaultLevel()
     {
-
         LevelFile defaultLvl = new LevelFile();
         defaultLvl.levelName = "default";
         defaultLvl.levelTexture = defaultLevel.EncodeToPNG();
-
-        defaultLvl.spawnPosition = new CreateVector();
-        defaultLvl.spawnPosition.x = 1f;
-        defaultLvl.spawnPosition.y = 1f;
-
-        defaultLvl.exitPosition = new CreateVector();
+        defaultLvl.spawnPosition = new SaveVector();
+        defaultLvl.spawnPosition.x = 1;
+        defaultLvl.spawnPosition.y = 1;
+        defaultLvl.exitPosition = new SaveVector();
         defaultLvl.exitPosition.x = 9.465f;
-        defaultLvl.exitPosition.y = 0.6f;
+        defaultLvl.exitPosition.y = 0.6f;      
+        levelFiles.Add(defaultLvl);
+        /*defaultLvl.enemySpawnPosition = new SaveVector();
+        defaultLvl.enemySpawnPosition.x = 4.35f;
+        defaultLvl.enemySpawnPosition.y = 1.23f;*/
+
     }
 
     public void AddAllLevels()
@@ -116,10 +121,37 @@ public class LevelEditor : MonoBehaviour {
             case EditState.exitpoint:
                 PaintSpawnExitPoint(false);
                 break;
+            /*case EditState.enemyspawnpoint:
+                PaintEnemySpawnPoint();
+                break;*/
             default:
                 break;
         }     
-    }  
+    }
+
+    /*void PaintEnemySpawnPoint()
+    {
+        if (gc.overUIElement)
+        {
+            return;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+
+            Node curNode = gc.GetCurrentNode();
+
+            if (curNode == null)
+            {
+                return;
+            }
+
+            GameObject gamebjct = enemySpawnPoint;
+
+            gamebjct.transform.position = gc.GetWorldPosFromNode(curNode);
+
+        }
+    }*/
 
     void PaintSpawnExitPoint(bool isSpawn)
     {
@@ -150,7 +182,38 @@ public class LevelEditor : MonoBehaviour {
         }
     }
 
-    
+    LevelFile IsDuplicate(LevelFile s)
+    {
+        for (int i = 0; i < levelFiles.Count; i++)
+        {
+            if (string.Equals(levelFiles[i].levelName, s.levelName))
+            {
+                return levelFiles[i];
+            }
+        }
+
+        return null;
+    }
+
+    int StringToInt(Dictionary<string,int> d, string key)
+    {
+        int index = -1;
+        d.TryGetValue(key, out index);
+        return index;
+    }
+
+    public void SaveLevel()
+    {
+        SaveToFile();
+        FindAllLevels();
+    }
+
+    public void FindAllLevels()
+    {
+        ClearObjs();
+        LoadAllLevels();
+        AddAllLevels();
+    }
 
     void SaveToFile()
     {
@@ -158,23 +221,27 @@ public class LevelEditor : MonoBehaviour {
         LevelFile save = new LevelFile();
         save.levelName = levelName;
         save.levelTexture = gc.GetTextureInstance().EncodeToPNG();
-        save.spawnPosition = new CreateVector();
+        save.spawnPosition = new SaveVector();
         save.spawnPosition.x = spawnPoint.transform.position.x;
         save.spawnPosition.y = spawnPoint.transform.position.y;
-     
-        save.exitPosition = new CreateVector();
+
+        save.exitPosition = new SaveVector();
         save.exitPosition.x = exitPoint.transform.position.x;
         save.exitPosition.y = exitPoint.transform.position.y;
-        
+     
+        /*save.enemySpawnPosition = new SaveVector();
+        save.enemySpawnPosition.x = enemySpawnPoint.transform.position.x;
+        save.enemySpawnPosition.y = enemySpawnPoint.transform.position.y;*/
 
-        if(gc.isAndroid)
+
+        if (gc.isAndroid)
         {
             int targetIndex = levelFiles.Count;
             LevelFile d = IsDuplicate(save);
 
-            if(d != null)
+            if (d != null)
             {
-             
+
                 targetIndex = StringToInt(level_dict, save.levelName);
                 levelFiles[targetIndex] = save;
 
@@ -203,31 +270,17 @@ public class LevelEditor : MonoBehaviour {
     string SaveLocation()
     {
         string saveLocation = Application.dataPath + "/Levels/";
-        if(!Directory.Exists(saveLocation))
+        if (!Directory.Exists(saveLocation))
         {
             Directory.CreateDirectory(saveLocation);
         }
         return saveLocation;
     }
 
-    LevelFile IsDuplicate(LevelFile s)
+    public void LoadLevel()
     {
-        for (int i = 0; i < levelFiles.Count; i++)
-        {
-            if (string.Equals(levelFiles[i].levelName, s.levelName))
-            {
-                return levelFiles[i];
-            }
-        }
+        gc.CreateLevel();
 
-        return null;
-    }
-
-    int StringToInt(Dictionary<string,int> d, string key)
-    {
-        int index = -1;
-        d.TryGetValue(key, out index);
-        return index;
     }
 
     public LevelFile LoadFromFile()
@@ -235,7 +288,7 @@ public class LevelEditor : MonoBehaviour {
 
         LevelFile saveFile = null;
 
-        if(gc.isAndroid)
+        if (gc.isAndroid)
         {
             int index = StringToInt(level_dict, levelName);
             saveFile = levelFiles[index];
@@ -244,11 +297,11 @@ public class LevelEditor : MonoBehaviour {
 
         string targetName = SaveLocation();
         targetName += levelName;
-        
+
         if (!File.Exists(targetName))
         {
             Debug.Log(levelName + "Not found");
-        
+
         }
         else
         {
@@ -271,18 +324,6 @@ public class LevelEditor : MonoBehaviour {
         Texture2D t = new Texture2D(1, 1);
         t.LoadImage(bytes);
         return t;
-    }
-    public void SaveLevel()
-    {
-        SaveToFile();
-        FindAllLevels();
-    }
-
-    public void FindAllLevels()
-    {
-        ClearObjs();
-        LoadAllLevels();
-        AddAllLevels();
     }
 
     public void LoadAllLevels()
@@ -313,12 +354,6 @@ public class LevelEditor : MonoBehaviour {
         }
     }
 
-    public void LoadLevel()
-    {
-        gc.CreateLevel();
-        
-    }  
-
 }
 
 [System.Serializable]
@@ -326,12 +361,13 @@ public class LevelFile
 {
     public string levelName;
     public byte[] levelTexture;
-    public CreateVector spawnPosition;
-    public CreateVector exitPosition;
+    public SaveVector spawnPosition;
+    public SaveVector exitPosition;
+    //public SaveVector enemySpawnPosition;
 }
 
 [System.Serializable]
-public class CreateVector
+public class SaveVector
 {
     public float x;
     public float y;

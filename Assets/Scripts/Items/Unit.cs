@@ -6,6 +6,7 @@ public class Unit : MonoBehaviour {
 
     public bool move;
     public bool hasLeft;
+    public bool isGunning;
 
     bool isInit;
     bool previouslyGrounded;
@@ -50,8 +51,9 @@ public class Unit : MonoBehaviour {
     int digBelowLimit;
     int digFrontLimit;
     int maxPixels;
-   
+
     public int pixelAmount;
+
     public Ability curAbility;
 
     Node curNode;
@@ -66,7 +68,8 @@ public class Unit : MonoBehaviour {
 
     public SpriteRenderer ren;
     public Animator unitAnimator;
-    public bool isGunning;
+    
+    
 
     public void Init(GameControl gc)
     {
@@ -154,11 +157,11 @@ public class Unit : MonoBehaviour {
         }
 
 	}
+
     void FlipUnit()
     {
         
         ren.flipX = movingLeft;
-       
         
     }
     
@@ -272,13 +275,14 @@ public class Unit : MonoBehaviour {
             targetPos = transform.position;
             targetPos.y = -50;
             previouslyGrounded = onGround;
+            FindObjectOfType<UnitControl>().DeleteUnit(this);
+            FindObjectOfType<UnitControl>().SetCount(-1);
             return false;
         }
         if ( curNode.isExit)
-        {         
-            unitAnimator.Play("Finish");
-            hasLeft = true;
-            EndPoint.FindObjectOfType<EndPoint>().Score();
+        {
+            unitAnimator.Play("Finish");          
+            hasLeft = true;           
             StartCoroutine(Finish());
             return false;
                     
@@ -319,7 +323,8 @@ public class Unit : MonoBehaviour {
                 {
                     targetNode = curNode;
                     ChangeAbility(Ability.die);
-                    unitAnimator.Play("Death_land");
+                    unitAnimator.Play("Death_land");                                  
+                    FindObjectOfType<UnitControl>().SetCount(-1);
                     previouslyGrounded = onGround;
                     return true;
                 }
@@ -600,7 +605,7 @@ public class Unit : MonoBehaviour {
                 float dist = Vector3.Distance(startPos, targetPos);
                 
                 moveSpeed = build_Speed / dist;
-                Debug.Log(moveSpeed);
+                //Debug.Log(moveSpeed);
                 
                 
 
@@ -791,7 +796,8 @@ public class Unit : MonoBehaviour {
                 }
             }
             gameControl.AddNodePossibilitiesForRemoval(nodes);
-            UnitControl.FindObjectOfType<UnitControl>().DeleteUnit(this);
+            FindObjectOfType<UnitControl>().DeleteUnit(this);
+            FindObjectOfType<UnitControl>().SetCount(-1);
         }
     }
 
@@ -867,7 +873,7 @@ public class Unit : MonoBehaviour {
         if (collision.collider.tag == ("enemy"))
         {
             StartCoroutine(Reaction(react));                 
-            EndPoint.FindObjectOfType<EndPoint>().ReduceScore();
+            FindObjectOfType<UnitControl>().SetCount(-1);
         }
 
     }
@@ -875,8 +881,9 @@ public class Unit : MonoBehaviour {
     public void ReachEnd()
     {
         
-         this.gameObject.SetActive(false);
-         UnitControl.FindObjectOfType<UnitControl>().DeleteUnit(this);
+        this.gameObject.SetActive(false);
+        FindObjectOfType<UnitControl>().SetEscapeCount(1);
+        FindObjectOfType<UnitControl>().DeleteUnit(this);
         
     }
 
@@ -894,7 +901,8 @@ public class Unit : MonoBehaviour {
     {
         yield return new WaitForSeconds(react);
         ChangeAbility(Ability.die);
-        UnitControl.FindObjectOfType<UnitControl>().DeleteUnit(this);
+        FindObjectOfType<UnitControl>().DeleteUnit(this);
+        FindObjectOfType<UnitControl>().SetCount(-1);
         StartCoroutine(Dying(dieT));
 
     }
