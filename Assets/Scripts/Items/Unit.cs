@@ -148,7 +148,7 @@ public class Unit : MonoBehaviour {
                 Explodes(delta);
                 break;
             case Ability.minigun:
-                UseMinigun();              
+                UseMinigun(delta);              
                 break;
             case Ability.die:
                 break;
@@ -277,6 +277,7 @@ public class Unit : MonoBehaviour {
             previouslyGrounded = onGround;
             FindObjectOfType<UnitControl>().DeleteUnit(this);
             FindObjectOfType<UnitControl>().SetCount(-1);
+            FindObjectOfType<UnitControl>().SetDeadCount(1);
             return false;
         }
         if ( curNode.isExit)
@@ -325,7 +326,9 @@ public class Unit : MonoBehaviour {
                     ChangeAbility(Ability.die);
                     unitAnimator.Play("Death_land");                                  
                     FindObjectOfType<UnitControl>().SetCount(-1);
+                    FindObjectOfType<UnitControl>().SetDeadCount(1);
                     previouslyGrounded = onGround;
+                    FindObjectOfType<UnitControl>().DeleteUnit(this);
                     return true;
                 }
                 else
@@ -554,7 +557,7 @@ public class Unit : MonoBehaviour {
 
     }
 
-    void UseMinigun()
+    void UseMinigun(float delta)
     {
         if (wep == null)
         {
@@ -564,7 +567,7 @@ public class Unit : MonoBehaviour {
         isGunning = false;
         fireTime = 5f;
         prepareToFire = 1f;      
-        StartCoroutine(BeforeShoot(prepareToFire, fireTime));
+        StartCoroutine(BeforeShoot(prepareToFire, fireTime, delta));
         
     }
 
@@ -798,6 +801,7 @@ public class Unit : MonoBehaviour {
             gameControl.AddNodePossibilitiesForRemoval(nodes);
             FindObjectOfType<UnitControl>().DeleteUnit(this);
             FindObjectOfType<UnitControl>().SetCount(-1);
+            FindObjectOfType<UnitControl>().SetDeadCount(1);
         }
     }
 
@@ -874,6 +878,7 @@ public class Unit : MonoBehaviour {
         {
             StartCoroutine(Reaction(react));                 
             FindObjectOfType<UnitControl>().SetCount(-1);
+            FindObjectOfType<UnitControl>().SetDeadCount(1);
         }
 
     }
@@ -903,6 +908,7 @@ public class Unit : MonoBehaviour {
         ChangeAbility(Ability.die);
         FindObjectOfType<UnitControl>().DeleteUnit(this);
         FindObjectOfType<UnitControl>().SetCount(-1);
+        FindObjectOfType<UnitControl>().SetDeadCount(1);
         StartCoroutine(Dying(dieT));
 
     }
@@ -913,27 +919,28 @@ public class Unit : MonoBehaviour {
         ImDead();
     }
 
-    IEnumerator ShootTime(float firetime)
+    IEnumerator ShootTime(float firetime, float delta)
     {   
         
         unitAnimator.SetTrigger("isFiring");
         isGunning = true;
         if (isGunning)
         {
-            wep.Fire();
+            wep.Fire(delta);
         }
-        yield return new WaitForSecondsRealtime(fireTime);
+        yield return new WaitForSeconds(fireTime);
         ChangeAbility(Ability.walker);
 
     }
 
-    IEnumerator BeforeShoot(float prepToFire, float firetime)
+    IEnumerator BeforeShoot(float prepToFire, float firetime ,float delta)
     {    
         
-        yield return new WaitForSecondsRealtime(prepToFire);
-        StartCoroutine(ShootTime(firetime));
+        yield return new WaitForSeconds(prepToFire);
+        StartCoroutine(ShootTime(firetime, delta));
         
     }  
+
 
     public void ImDead()
     {

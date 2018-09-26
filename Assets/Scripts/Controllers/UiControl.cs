@@ -15,6 +15,7 @@ public class UiControl : MonoBehaviour {
     public Sprite cSelection;
     public Text vellingCount;
     public Text vellingEscape;
+    public Text vellingDeadCount;
 
     public bool isLoading;
     public bool isTextureUI;
@@ -37,6 +38,7 @@ public class UiControl : MonoBehaviour {
     public GameObject loading;
     public GameObject loadTextureUI;
     public GameObject winPopUp;
+    public GameObject losePopUp;
     public Text wintext;
     public InputField inputLinkField;
     
@@ -47,6 +49,7 @@ public class UiControl : MonoBehaviour {
         loading.SetActive(false);
         loadTextureUI.SetActive(false);
         winPopUp.SetActive(false);
+        losePopUp.SetActive(false);
     }
 
     //Replaces Update, this is updated on GameControl class.
@@ -98,7 +101,6 @@ public class UiControl : MonoBehaviour {
         }
 
         curButton = button;
-
         defaultColor = curButton.buttonImage.color;
         curButton.buttonImage.color = selectTint;
         targetAbility = curButton.ability;
@@ -112,6 +114,11 @@ public class UiControl : MonoBehaviour {
     }
 
     public void ResetVellingEscape(int count)
+    {
+        vellingEscape.text = "" + count;
+    }
+
+    public void ResetVellingDead(int count)
     {
         vellingEscape.text = "" + count;
     }

@@ -6,6 +6,7 @@ public class UnitControl : MonoBehaviour {
 
     public bool changeSpeed;
     public bool unitsSpawned;
+    public bool wonGame;
 
     float delta;
     float timer;
@@ -16,6 +17,7 @@ public class UnitControl : MonoBehaviour {
     int escapeCount;
     int maxUnits;
     int outCount;
+    int deadCount;
 
     public GameObject unitPrefab;
 
@@ -33,6 +35,7 @@ public class UnitControl : MonoBehaviour {
     
     void Start ()
     {
+        wonGame = false;
         unitsSpawned = false;
         outCount = 0;
         escapeCount = 0;
@@ -70,14 +73,19 @@ public class UnitControl : MonoBehaviour {
 
         if (outCount <= maxUnits/2 && escapeCount >= maxUnits/2)
         {
-
+            wonGame = true;
             UiControl.singleton.winPopUp.SetActive(true);
-
+            
             if (escapeCount == maxUnits)
             {
                 UiControl.singleton.wintext.text = "PERFECT !";
                 //perfect
             }
+        }
+
+        if (unitsSpawned)
+        {
+            Ulose();
         }
         
         if (units.Count < maxUnits)
@@ -88,7 +96,6 @@ public class UnitControl : MonoBehaviour {
             {              
                 timer = interval;
                 SpawnUnit();
-                SetCount(1);
             }
         }
 
@@ -100,13 +107,24 @@ public class UnitControl : MonoBehaviour {
 
     void SpawnUnit()
     {
-        
-        GameObject spawn = Instantiate(unitPrefab);
-        spawn.transform.parent = unitsP.transform;
-        Unit u = spawn.GetComponent<Unit>();
-        u.Init(FindObjectOfType<GameControl>());
-        units.Add(u);
-        u.move = true;
+        if (!unitsSpawned)
+        {
+            GameObject spawn = Instantiate(unitPrefab);
+            spawn.transform.parent = unitsP.transform;
+            Unit u = spawn.GetComponent<Unit>();
+            u.Init(FindObjectOfType<GameControl>());
+            units.Add(u);
+            SetCount(1);
+            u.move = true;
+        }
+    }
+    
+    void Ulose()
+    {
+        if (unitsSpawned && !wonGame && outCount == 0)
+        {
+            FindObjectOfType<UiControl>().losePopUp.SetActive(true);
+        }
     }
 
     public void DeleteUnit(Unit curUnit)
@@ -149,6 +167,25 @@ public class UnitControl : MonoBehaviour {
     public int GetCount()
     {
         return this.outCount;
+    }
+
+    public void SetDeadCount(int count)
+    {
+        this.deadCount += count;
+
+        FindObjectOfType<UiControl>().ResetVellingDead(deadCount);
+    }
+
+    public void ResetDeadCount()
+    {
+        this.deadCount = 0;
+
+        FindObjectOfType<UiControl>().ResetVellingDead(deadCount);
+    }
+
+    public int GetDeadCount()
+    {
+        return this.deadCount;
     }
 
     public void SetMaxUnits(int units)

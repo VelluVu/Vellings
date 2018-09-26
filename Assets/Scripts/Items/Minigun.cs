@@ -17,10 +17,10 @@ public class Minigun : MonoBehaviour {
         burst = 10;    
     }
     
-    public void Fire()
+    public void Fire(float delta)
     {
         
-        timer -= Time.deltaTime;
+        timer -= delta;
         for (int i = 0; i < burst; i++)
         {
             if (timer < 0)

@@ -113,6 +113,8 @@ public class GameControl : MonoBehaviour
                 uiControl.mainMenu.SetActive(true);
                 uiControl.backButton.SetActive(false);
                 uiControl.winPopUp.SetActive(false);
+                uiControl.losePopUp.SetActive(false);
+                unitControl.ResetDeadCount();
                 unitControl.ResetCount();
                 unitControl.ResetEscapeCount();
                
