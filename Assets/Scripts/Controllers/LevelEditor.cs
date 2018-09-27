@@ -59,7 +59,7 @@ public class LevelEditor : MonoBehaviour {
         defaultLvl.spawnPosition.y = 1;
         defaultLvl.exitPosition = new SaveVector();
         defaultLvl.exitPosition.x = 9.465f;
-        defaultLvl.exitPosition.y = 0.6f;      
+        defaultLvl.exitPosition.y = 0.571f;      
         levelFiles.Add(defaultLvl);
         /*defaultLvl.enemySpawnPosition = new SaveVector();
         defaultLvl.enemySpawnPosition.x = 4.35f;

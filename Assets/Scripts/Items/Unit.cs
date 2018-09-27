@@ -69,7 +69,7 @@ public class Unit : MonoBehaviour {
     public SpriteRenderer ren;
     public Animator unitAnimator;
     
-    
+    //Custom initialize
 
     public void Init(GameControl gc)
     {
@@ -98,6 +98,8 @@ public class Unit : MonoBehaviour {
         isGunning = false;
         
     }
+
+    //Spawn Position of this unit
 
     void PlaceOnNode()
     {
@@ -130,7 +132,7 @@ public class Unit : MonoBehaviour {
                 Walker(delta);
                 break;
             case Ability.bouncer:
-                Bouncer();
+                Bouncer();               
                 break;
             case Ability.dig_forward:
                 DigForward(delta); 
@@ -184,6 +186,7 @@ public class Unit : MonoBehaviour {
                     FindStopNodes();
                     curAbility = a;
                     unitAnimator.Play("Bouncer");
+                    FindObjectOfType<UnitControl>().SetOutCount(-1);
                     return true;
                 }
                 else
@@ -276,7 +279,7 @@ public class Unit : MonoBehaviour {
             targetPos.y = -50;
             previouslyGrounded = onGround;
             FindObjectOfType<UnitControl>().DeleteUnit(this);
-            FindObjectOfType<UnitControl>().SetCount(-1);
+            FindObjectOfType<UnitControl>().SetOutCount(-1);
             FindObjectOfType<UnitControl>().SetDeadCount(1);
             return false;
         }
@@ -325,7 +328,7 @@ public class Unit : MonoBehaviour {
                     targetNode = curNode;
                     ChangeAbility(Ability.die);
                     unitAnimator.Play("Death_land");                                  
-                    FindObjectOfType<UnitControl>().SetCount(-1);
+                    FindObjectOfType<UnitControl>().SetOutCount(-1);
                     FindObjectOfType<UnitControl>().SetDeadCount(1);
                     previouslyGrounded = onGround;
                     FindObjectOfType<UnitControl>().DeleteUnit(this);
@@ -452,6 +455,7 @@ public class Unit : MonoBehaviour {
         if (CheckNodeBelow() || CheckCurrentNode())
         {
             ClearStopNodes();
+            FindObjectOfType<UnitControl>().SetOutCount(1);
         }
     }
 
@@ -800,7 +804,7 @@ public class Unit : MonoBehaviour {
             }
             gameControl.AddNodePossibilitiesForRemoval(nodes);
             FindObjectOfType<UnitControl>().DeleteUnit(this);
-            FindObjectOfType<UnitControl>().SetCount(-1);
+            FindObjectOfType<UnitControl>().SetOutCount(-1);
             FindObjectOfType<UnitControl>().SetDeadCount(1);
         }
     }
@@ -877,7 +881,7 @@ public class Unit : MonoBehaviour {
         if (collision.collider.tag == ("enemy"))
         {
             StartCoroutine(Reaction(react));                 
-            FindObjectOfType<UnitControl>().SetCount(-1);
+            FindObjectOfType<UnitControl>().SetOutCount(-1);
             FindObjectOfType<UnitControl>().SetDeadCount(1);
         }
 
@@ -907,7 +911,7 @@ public class Unit : MonoBehaviour {
         yield return new WaitForSeconds(react);
         ChangeAbility(Ability.die);
         FindObjectOfType<UnitControl>().DeleteUnit(this);
-        FindObjectOfType<UnitControl>().SetCount(-1);
+        FindObjectOfType<UnitControl>().SetOutCount(-1);
         FindObjectOfType<UnitControl>().SetDeadCount(1);
         StartCoroutine(Dying(dieT));
 

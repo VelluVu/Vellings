@@ -16,40 +16,28 @@ public class GameControl : MonoBehaviour
     public Texture2D levelTexture;
     Texture2D textureInstance;
     Texture2D miniMapInstance;
-    public Texture2D GetTextureInstance()
-    {
-        return textureInstance;
-    }
-
-    public void SetTextureInstance(Texture2D texture)
-    {
-        textureInstance = texture;
-    }
 
     public SpriteRenderer levelRenderer;
 
-    public float posOffset;
+    public int pixelAmount;
+    public int maxPixels;
     public int maxX;
     public int maxY;
     int resetCount;
-    bool addTexture;
-    public float editRadius = 6f;
+    
     public bool overUIElement;
-  
+    public bool isSpeed;
     public bool addFill;
-    public int pixelAmount;
-    public int maxPixels;
+    bool addTexture;
+
+    public float editRadius = 6f;
+    public float posOffset;
     float f_t;
     float p_t;
 
     Node[,] grid;
     Node currentNode;
     Node previousNode;
-
-    public Node GetCurrentNode()
-    {
-        return this.currentNode;
-    }
 
     Unit curUnit;
 
@@ -99,6 +87,8 @@ public class GameControl : MonoBehaviour
        
     }
 
+    //Changes game states
+
     public void ChangeState(GameState targetState)
     {
         gameState = targetState;
@@ -106,46 +96,28 @@ public class GameControl : MonoBehaviour
         switch (gameState)
         {
             case GameState.mainMenu:
-                uiControl.gameUI.SetActive(false);
-                uiControl.levelEditor.SetActive(false);
-                uiControl.miniMap.SetActive(false);
-                uiControl.levelSelection.SetActive(true);
-                uiControl.mainMenu.SetActive(true);
-                uiControl.backButton.SetActive(false);
-                uiControl.winPopUp.SetActive(false);
-                uiControl.losePopUp.SetActive(false);
-                unitControl.ResetDeadCount();
-                unitControl.ResetCount();
-                unitControl.ResetEscapeCount();
+                uiControl.MainMenuUISetUp();
+                unitControl.ResetMapCounters();
                
                 break;
             case GameState.levelEditor:
-                uiControl.gameUI.SetActive(false);
-                uiControl.levelEditor.SetActive(true);
-                uiControl.miniMap.SetActive(true);
-                uiControl.levelSelection.SetActive(true);
-                uiControl.mainMenu.SetActive(false);
-                uiControl.backButton.SetActive(true);
-                unitControl.ResetCount();
+                uiControl.LevelEditorSetUp();
+                unitControl.ResetÖutCount();
                 InitLevelEditor();
                 break;
             case GameState.playGame:
                 unitControl.SetMaxUnits(10);
-                uiControl.gameUI.SetActive(true);
-                uiControl.levelEditor.SetActive(false);
-                uiControl.miniMap.SetActive(true);
-                uiControl.levelSelection.SetActive(false);
-                uiControl.mainMenu.SetActive(false);
-                uiControl.backButton.SetActive(true);
+                uiControl.GameUISetUp();
                 //enemy.SetActive(true);
                 //FindObjectOfType<Enemy>().EnemyPlaceOnNode();
-                
                 Init();
                 break;
             default:
                 break;
         }
     }
+
+    //Custom initialization
 
     public void Init()
     {      
@@ -154,6 +126,18 @@ public class GameControl : MonoBehaviour
         spawnPosition = GetWorldPosFromNode(spawnNode);     
         SetExitPositions();
     }
+
+    public Texture2D GetTextureInstance()
+    {
+        return textureInstance;
+    }
+
+    public void SetTextureInstance(Texture2D texture)
+    {
+        textureInstance = texture;
+    }
+
+    //Initialize level editor
 
     public void InitLevelEditor()
     {
@@ -185,6 +169,8 @@ public class GameControl : MonoBehaviour
         uiControl.miniMapRenderer.sprite = Sprite.Create(miniMapInstance, rect, Vector2.zero, 100, 0, SpriteMeshType.FullRect);
         uiControl.loading.SetActive(false);
     }
+
+    //Build the level apply nodes to each coordinate
 
     public void CreateLevel()
     {
@@ -229,6 +215,8 @@ public class GameControl : MonoBehaviour
         uiControl.miniMapRenderer.preserveAspect = true;
     }
 
+    //Loads the level from file and sets spawn + exit positions
+
     public void LoadLevel()
     {
 
@@ -267,6 +255,8 @@ public class GameControl : MonoBehaviour
         }*/
     }
 
+    //Checks if input has link
+
     public void LoadTextureFromWWW(string link)
     {
         if ( string.IsNullOrEmpty(link))
@@ -277,6 +267,8 @@ public class GameControl : MonoBehaviour
 
         StartCoroutine(LoadTextureFromWWWTime(link));
     }
+
+    //Starts loading the texture and applies it
     
     IEnumerator LoadTextureFromWWWTime(string url)
     {
@@ -303,6 +295,8 @@ public class GameControl : MonoBehaviour
         }
     }
 
+    //Updates level changes to minimap
+
     void UpdateMinimap()
     {
         miniMapInstance = new Texture2D(maxX, maxY);
@@ -323,6 +317,7 @@ public class GameControl : MonoBehaviour
         uiControl.miniMapRenderer.sprite = Sprite.Create(miniMapInstance, rect, Vector2.zero, 100, 0, SpriteMeshType.FullRect);
         uiControl.miniMapRenderer.preserveAspect = true;
     }
+
 
     private void Update()
     {
@@ -353,7 +348,7 @@ public class GameControl : MonoBehaviour
         }
     }
 
-    public bool isSpeed;
+    //State where Game is Played
 
     void InGame()
     {
@@ -380,6 +375,8 @@ public class GameControl : MonoBehaviour
         }*/
 
     }
+
+    //When Mouse pressed sets pixel color to chosen color and on custom radius
 
     public void HandleMouseInput(Color targetColor, float targetRadus)
     {
@@ -440,6 +437,8 @@ public class GameControl : MonoBehaviour
         }
     }
 
+    //On Mouse click sets tha unit ability to chosen ability
+
     void HandleUnit()
     {
         if (curUnit == null)
@@ -460,6 +459,8 @@ public class GameControl : MonoBehaviour
         }
     }
 
+    //Checks if the cursor is on any unit
+
     void CheckForUnit()
     {
         mousePos.z = 0;
@@ -474,6 +475,8 @@ public class GameControl : MonoBehaviour
         uiControl.overUnit = true;
     }
 
+    //Finds the cursor position
+
     void GetMousePosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -481,14 +484,20 @@ public class GameControl : MonoBehaviour
         currentNode = GetNodeFromWorldPos(mousePos);
     }
 
+    //OurNodeLists
+
     List<Node> clearNodes = new List<Node>();
     List<Node> buildNodes = new List<Node>();
     List<FillNode> fillNodes = new List<FillNode>(); 
     
+    //Add Nodes that is about to be removed to the list
+
     public void AddNodePossibilitiesForRemoval(List<Node> nlist)
     {
         clearNodes.AddRange(nlist);
     }
+
+    //Clears the list of Nodes
 
     public void ClearPixelList()
     {
@@ -513,10 +522,14 @@ public class GameControl : MonoBehaviour
 
     }
 
+    //Add Nodes to selection list
+
     public void AddPossibleNodesToSelection(List<Node> nlist)
     {
         buildNodes.AddRange(nlist);
     }
+
+    //Sets the build ability nodes
 
     void BuildNodeList()
     {
@@ -540,6 +553,7 @@ public class GameControl : MonoBehaviour
     }
 
     //Only used to test fill pixels
+
     void DebugFill()
     {
         if(pixelAmount > maxPixels)
@@ -566,6 +580,8 @@ public class GameControl : MonoBehaviour
         fillNodes.Add(f);
         addTexture = true;
     }
+
+    //Calculates fill node movement and sets a color
 
     void HandleFillNodes(float delta)
     {
@@ -661,10 +677,14 @@ public class GameControl : MonoBehaviour
         }
     }
 
+    //Add new Node
+
     public void AddFillNode(FillNode f)
     {
         fillNodes.Add(f);
     }
+
+    //Get Node from vector 
 
     public Node GetNodeFromWorldPos(Vector3 wp)
     {
@@ -673,6 +693,8 @@ public class GameControl : MonoBehaviour
 
         return GetNode(t_x, t_y);
     }
+
+    //Get Node from x, y
 
     public Node GetNode(int x, int y)
     {
@@ -683,6 +705,8 @@ public class GameControl : MonoBehaviour
         return grid[x, y];
     }
 
+    //Get Position as Vector with offset
+
     public Vector3 GetWorldPosFromNode(int x, int y)
     {
         Vector3 r = Vector3.zero;
@@ -690,6 +714,8 @@ public class GameControl : MonoBehaviour
         r.y = y * posOffset;
         return r;
     }
+
+    //Get Node position with offset
 
     public Vector3 GetWorldPosFromNode(Node n)
     {
@@ -712,6 +738,8 @@ public class GameControl : MonoBehaviour
                overUIElement == control.overUIElement;
     }
 
+    //Button that sets game state to main menu
+
     public void BackButton()
     {
 
@@ -722,6 +750,8 @@ public class GameControl : MonoBehaviour
 
     }
 
+    //Set up the exit poition
+
     public void SetExitPositions()
     {
         Vector3 exitPosition = levelEditor.exitPoint.transform.position;
@@ -729,7 +759,7 @@ public class GameControl : MonoBehaviour
 
         for(int x = -1; x < 1; x++)
         {
-            for (int y = -1; y < 4; y++)
+            for (int y = -4; y < 6; y++)
             {
                 int t_x = eNode.x + x;
                 int t_y = eNode.y + y;
@@ -745,8 +775,14 @@ public class GameControl : MonoBehaviour
             }
         }
     }
+    public Node GetCurrentNode()
+    {
+     
+        return this.currentNode;
+    }
 }
 
+//Each Pixel
 
 public class Node
 {
@@ -757,6 +793,8 @@ public class Node
     public bool isFiller;
     public bool isExit;
 }
+
+//Each replaced Pixel
 
 public class FillNode
 {

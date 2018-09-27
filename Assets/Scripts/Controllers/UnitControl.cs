@@ -14,6 +14,7 @@ public class UnitControl : MonoBehaviour {
     float momentBeforeSpawning;
     float timeToEnrage;
 
+    int spawnCount;
     int escapeCount;
     int maxUnits;
     int outCount;
@@ -47,63 +48,78 @@ public class UnitControl : MonoBehaviour {
         unitsP = new GameObject();
         unitsP.name = "units parent";
 
-        
-
     }
+
+    //Custom update for unitcontrol and each unit, passing same deltatime for each unit bottom of the function
 	
 	public void Tick (float d, float timeScale)
     {
-        
+
         StartCoroutine(WaitStart(momentBeforeSpawning, timeScale));
         StartCoroutine(Enrage(timeToEnrage, timeScale));
 
         delta = d;
 
-
-        if(changeSpeed)
+        if (changeSpeed)
         {
             changeSpeed = false;
             ChangeSpeedOfUnits(timeScale);
         }
 
-        if (units.Count == maxUnits)
+        if (spawnCount == maxUnits)
         {
             unitsSpawned = true;
         }
 
-        if (outCount <= maxUnits/2 && escapeCount >= maxUnits/2)
-        {
-            wonGame = true;
-            UiControl.singleton.winPopUp.SetActive(true);
-            
-            if (escapeCount == maxUnits)
-            {
-                UiControl.singleton.wintext.text = "PERFECT !";
-                //perfect
-            }
-        }
+        WinConditions();
 
-        if (unitsSpawned)
+        Ulose();
+
+        SpawnTime();
+
+        for (int i = 0; i < units.Count; i++)
         {
-            Ulose();
+            units[i].Tick(delta);
         }
-        
-        if (units.Count < maxUnits)
+    }
+
+    private void SpawnTime()
+    {
+        if (units.Count < maxUnits && deadCount <= maxUnits)
         {
-                   
+
             timer -= delta;
             if (timer < 0)
-            {              
+            {
                 timer = interval;
                 SpawnUnit();
             }
         }
+    }
 
-		for (int i = 0; i < units.Count; i++)
-        {           
-            units[i].Tick(delta);
+    private void WinConditions()
+    {
+        if (unitsSpawned && outCount == 0 && escapeCount >= maxUnits * 0.5f)
+        {
+            wonGame = true;
+            UiControl.singleton.winPopUp.SetActive(true);
+
+            if (escapeCount == maxUnits)
+            {
+
+                UiControl.singleton.wintext.text = "100% PERFECT !";
+                //perfect
+
+            }
+            else if (escapeCount >= maxUnits * 0.75f && deadCount <= maxUnits * 0.25f)
+            {
+
+                UiControl.singleton.wintext.text = "75% Escaped!";
+            }
         }
-	}
+    }
+
+    //Creates one Velling
 
     void SpawnUnit()
     {
@@ -114,24 +130,31 @@ public class UnitControl : MonoBehaviour {
             Unit u = spawn.GetComponent<Unit>();
             u.Init(FindObjectOfType<GameControl>());
             units.Add(u);
-            SetCount(1);
+            SetOutCount(1);
+            spawnCount++;
             u.move = true;
         }
     }
     
+    //Lose Window pops up
+
     void Ulose()
     {
-        if (unitsSpawned && !wonGame && outCount == 0)
+        if (deadCount == maxUnits || unitsSpawned && outCount == 0)
         {
             FindObjectOfType<UiControl>().losePopUp.SetActive(true);
         }
     }
+
+    //Delete current unit
 
     public void DeleteUnit(Unit curUnit)
     {
         units.Remove(curUnit);
     }
     
+    //Change speed for all units
+
     void ChangeSpeedOfUnits(float t)
     {
         for (int i = 0; i < units.Count; i++)
@@ -140,6 +163,8 @@ public class UnitControl : MonoBehaviour {
         }
 
     }
+
+    //Clear all units
 
     public void ClearAll()
     {
@@ -150,21 +175,23 @@ public class UnitControl : MonoBehaviour {
         units.Clear();
     }
 
-    public void SetCount(int count)
+    //These functions Manipulate various counter values
+
+    public void SetOutCount(int count)
     {
         this.outCount += count;
        
         FindObjectOfType<UiControl>().ResetVellingCounter(outCount);
     }
 
-    public void ResetCount()
+    public void ResetÖutCount()
     {
         this.outCount = 0;
 
         FindObjectOfType<UiControl>().ResetVellingCounter(outCount);
     }
 
-    public int GetCount()
+    public int GetOutCount()
     {
         return this.outCount;
     }
@@ -202,12 +229,34 @@ public class UnitControl : MonoBehaviour {
         FindObjectOfType<UiControl>().ResetVellingCounter(outCount);
     }
 
+    public void ResetSpawnCount()
+    {
+        this.spawnCount = 0;
+    }
+
     public void ResetEscapeCount()
     {
         this.escapeCount = 0;
         FindObjectOfType<UiControl>().ResetVellingEscape(escapeCount);
     }
-    
+
+    //Function to reset all counter values
+
+    public void ResetMapCounters()
+    {
+        unitsSpawned = false;
+        this.escapeCount = 0;
+        this.spawnCount = 0;
+        this.deadCount = 0;
+        this.outCount = 0;
+
+        FindObjectOfType<UiControl>().ResetVellingCounter(outCount);
+        FindObjectOfType<UiControl>().ResetVellingDead(deadCount);
+        FindObjectOfType<UiControl>().ResetVellingEscape(escapeCount);
+    }
+
+    //Time functions "cooldowns"
+
     IEnumerator WaitStart(float momentBeforeSpawning,float timeScale)
     {
         timeScale = 0;
@@ -222,6 +271,8 @@ public class UnitControl : MonoBehaviour {
         Debug.Log("Enrage");
         timeScale = 5f;
     }
+
+    //Function to find closest unit to select point
 
     public Unit GetClosest(Vector3 origin)
     {
@@ -240,6 +291,9 @@ public class UnitControl : MonoBehaviour {
         return r;
     }   
 }
+
+//Unit abilities
+
 public enum Ability
 {
     walker, bouncer, umbrella, dig_forward, dig_down, explode, builder, filler, die, minigun, speedy

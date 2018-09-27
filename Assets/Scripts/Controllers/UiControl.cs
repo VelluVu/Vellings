@@ -14,7 +14,7 @@ public class UiControl : MonoBehaviour {
     public Sprite cTarget2;
     public Sprite cSelection;
     public Text vellingCount;
-    public Text vellingEscape;
+    public Text vellingEscapeCount;
     public Text vellingDeadCount;
 
     public bool isLoading;
@@ -84,6 +84,7 @@ public class UiControl : MonoBehaviour {
         GameControl.singleton.LoadTextureFromWWW(inputLinkField.text);
     }
 
+    
     public void PressAbilityButton(ButtonControl button)
     {
 
@@ -106,7 +107,7 @@ public class UiControl : MonoBehaviour {
         targetAbility = curButton.ability;
     }
 
-    public static UiControl singleton;
+    //Manipulating counters texts in UI
 
     public void ResetVellingCounter(int count)
     {
@@ -115,16 +116,52 @@ public class UiControl : MonoBehaviour {
 
     public void ResetVellingEscape(int count)
     {
-        vellingEscape.text = "" + count;
+        vellingEscapeCount.text = "" + count;
     }
 
     public void ResetVellingDead(int count)
     {
-        vellingEscape.text = "" + count;
+        vellingDeadCount.text = "" + count;
+    }
+    
+    //GameState SetUps
+
+    public void MainMenuUISetUp()
+    {
+        gameUI.SetActive(false);
+        levelEditor.SetActive(false);
+        miniMap.SetActive(false);
+        levelSelection.SetActive(true);
+        mainMenu.SetActive(true);
+        backButton.SetActive(false);
+        winPopUp.SetActive(false);
+        losePopUp.SetActive(false);
     }
 
-    void Awake()
+    public void LevelEditorSetUp()
     {
+        gameUI.SetActive(false);
+        levelEditor.SetActive(true);
+        miniMap.SetActive(true);
+        levelSelection.SetActive(true);
+        mainMenu.SetActive(false);
+        backButton.SetActive(true);
+    }
+
+    public void GameUISetUp()
+    {
+        gameUI.SetActive(true);
+        levelEditor.SetActive(false);
+        miniMap.SetActive(true);
+        levelSelection.SetActive(false);
+        mainMenu.SetActive(false);
+        backButton.SetActive(true);
+    }
+
+    public static UiControl singleton;
+
+    void Awake()
+    {   
         singleton = this;
     }
 }
